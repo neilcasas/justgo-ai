@@ -78,7 +78,9 @@ export default function ChatPage() {
               <Link href="/lawyers">
                 <Button variant="ghost">Browse Lawyers</Button>
               </Link>
-              <Button variant="outline">Profile</Button>
+              <Link href="/profile">
+                <Button variant="outline">Profile</Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -93,9 +95,8 @@ export default function ChatPage() {
                 className={`flex items-start space-x-3 max-w-3xl ${message.type === "user" ? "flex-row-reverse space-x-reverse" : ""}`}
               >
                 <div
-                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                    message.type === "user" ? "bg-blue-600" : "bg-gray-600"
-                  }`}
+                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${message.type === "user" ? "bg-blue-600" : "bg-gray-600"
+                    }`}
                 >
                   {message.type === "user" ? (
                     <User className="w-4 h-4 text-white" />
@@ -104,9 +105,8 @@ export default function ChatPage() {
                   )}
                 </div>
                 <div
-                  className={`rounded-lg p-4 ${
-                    message.type === "user" ? "bg-blue-600 text-white" : "bg-white border shadow-sm"
-                  }`}
+                  className={`rounded-lg p-4 ${message.type === "user" ? "bg-blue-600 text-white" : "bg-white border shadow-sm"
+                    }`}
                 >
                   <p className="text-sm">{message.content}</p>
 

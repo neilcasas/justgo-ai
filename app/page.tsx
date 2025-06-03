@@ -12,7 +12,7 @@ export default function LandingPage() {
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
               <Scale className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-2xl font-bold text-gray-900">LegalAI PH</span>
+              <span className="ml-2 text-2xl font-bold text-gray-900">JustGo</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/chat">
@@ -22,7 +22,7 @@ export default function LandingPage() {
                 <Button variant="ghost">Find Lawyers</Button>
               </Link>
               <Link href="/login">
-                <Button>Sign In</Button>
+                <Button className="bg-black text-white">Sign In</Button>
               </Link>
             </div>
           </div>
@@ -39,7 +39,7 @@ export default function LandingPage() {
           </p>
           <div className="flex justify-center space-x-4">
             <Link href="/chat">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
                 Start Legal Chat
               </Button>
             </Link>
@@ -196,7 +196,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "LegalAI PH helped me understand my employment rights and generated the complaint letter I needed. The
+                  "JustGo PH helped me understand my employment rights and generated the complaint letter I needed. The
                   lawyer recommendations were spot-on!"
                 </p>
                 <div className="font-semibold">Maria Santos</div>
@@ -231,7 +231,7 @@ export default function LandingPage() {
             Join thousands of Filipinos who have found legal solutions through our platform
           </p>
           <Link href="/chat">
-            <Button size="lg" variant="secondary">
+            <Button size="lg" className="bg-white" variant="secondary">
               Start Your Legal Chat Now
             </Button>
           </Link>
@@ -245,7 +245,7 @@ export default function LandingPage() {
             <div>
               <div className="flex items-center mb-4">
                 <Scale className="h-6 w-6 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">LegalAI PH</span>
+                <span className="ml-2 text-xl font-bold">JustGo PH</span>
               </div>
               <p className="text-gray-400">
                 Making legal assistance accessible to all Filipinos through AI technology.
@@ -275,7 +275,7 @@ export default function LandingPage() {
             <div>
               <h3 className="font-semibold mb-4">Contact</h3>
               <ul className="space-y-2 text-gray-400">
-                <li>support@legalai.ph</li>
+                <li>support@JustGo.ph</li>
                 <li>+63 2 123 4567</li>
                 <li>Manila, Philippines</li>
               </ul>
@@ -283,7 +283,7 @@ export default function LandingPage() {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 LegalAI PH. All rights reserved.</p>
+            <p>&copy; 2024 JustGo PH. All rights reserved.</p>
           </div>
         </div>
       </footer>
