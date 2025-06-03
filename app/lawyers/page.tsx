@@ -150,7 +150,7 @@ export default function LawyersPage() {
             <Link href="/" className="flex items-center">
               <Image
                 src="/logo.png"
-                alt="LegalAI PH Logo"
+                alt="JustGo Logo"
                 width={150}
                 height={60}
               />

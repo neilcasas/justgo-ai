@@ -27,7 +27,7 @@ export default function LandingPage() {
             <div className="flex items-center">
               <Image
                 src="/logo.png"
-                alt="LegalAI PH Logo"
+                alt="JustGo Logo"
                 width={150}
                 height={60}
               />
