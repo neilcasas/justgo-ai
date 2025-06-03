@@ -277,7 +277,7 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
             <Link href="/" className="flex items-center">
               <Scale className="h-6 w-6 text-blue-600" />
               <span className="ml-2 text-xl font-bold text-gray-900">
-                LegalAI PH
+                JustGo PH
               </span>
             </Link>
             <div className="flex items-center space-x-4">

@@ -244,11 +244,11 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "LegalAI PH helped me understand my employment rights and
+                  "JustGo PH helped me understand my employment rights and
                   generated the complaint letter I needed. The lawyer
                   recommendations were spot-on!"
                 </p>
-                <div className="font-semibold">Maria Santos</div>
+                <div className="font-semibold">Charmaine Zaragosa</div>
                 <div className="text-sm text-gray-500">
                   Small Business Owner
                 </div>
@@ -270,7 +270,7 @@ export default function LandingPage() {
                   platform gave me the guidance I needed to understand my
                   options."
                 </p>
-                <div className="font-semibold">Juan Dela Cruz</div>
+                <div className="font-semibold">Anne Campos</div>
                 <div className="text-sm text-gray-500">OFW</div>
               </CardContent>
             </Card>
@@ -303,7 +303,7 @@ export default function LandingPage() {
             <div>
               <div className="flex items-center mb-4">
                 <Scale className="h-6 w-6 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">LegalAI PH</span>
+                <span className="ml-2 text-xl font-bold">JustGo PH</span>
               </div>
               <p className="text-gray-400">
                 Making legal assistance accessible to all Filipinos through AI
@@ -334,7 +334,7 @@ export default function LandingPage() {
             <div>
               <h3 className="font-semibold mb-4">Contact</h3>
               <ul className="space-y-2 text-gray-400">
-                <li>support@legalai.ph</li>
+                <li>support@justgo.ph</li>
                 <li>+63 2 123 4567</li>
                 <li>Manila, Philippines</li>
               </ul>
@@ -342,7 +342,7 @@ export default function LandingPage() {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 LegalAI PH. All rights reserved.</p>
+            <p>&copy; 2024 JustGo PH. All rights reserved.</p>
           </div>
         </div>
       </footer>
