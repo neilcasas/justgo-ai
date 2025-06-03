@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 // Mock data for multiple lawyer profiles
 const lawyerProfiles = {
@@ -273,12 +274,14 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center py-1">
             <Link href="/" className="flex items-center">
-              <Scale className="h-6 w-6 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                JustGo PH
-              </span>
+              <Image
+                src="/logo.png"
+                alt="JustGo Logo"
+                width={150}
+                height={60}
+              />
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/chat">
