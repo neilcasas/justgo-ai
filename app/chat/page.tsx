@@ -61,21 +61,21 @@ interface DocumentGenerationState {
 const bryanLegalResponse = {
   advice: `Hello Bryan, I've analyzed your situation regarding unpaid salary and unjust termination. Based on Philippine labor laws, here's my assessment:
 
-**LEGAL ANALYSIS:**
+LEGAL ANALYSIS:
 
-1. **Unpaid Salary Violation**: Under Article 103 of the Labor Code of the Philippines (Presidential Decree No. 442), wages must be paid at least once every two weeks or twice a month. Your employer's failure to pay your salary constitutes a violation of this provision.
+1. Unpaid Salary Violation: Under Article 103 of the Labor Code of the Philippines (Presidential Decree No. 442), wages must be paid at least once every two weeks or twice a month. Your employer's failure to pay your salary constitutes a violation of this provision.
 
-2. **Unjust Termination**: Article 294 (formerly Article 279) of the Labor Code provides security of tenure to employees. Termination without just or authorized cause and without due process constitutes illegal dismissal.
+2. Unjust Termination: Article 294 (formerly Article 279) of the Labor Code provides security of tenure to employees. Termination without just or authorized cause and without due process constitutes illegal dismissal.
 
-3. **Due Process Requirements**: Article 292 requires employers to follow procedural due process - written notice specifying grounds for termination and opportunity to be heard.
+3. Due Process Requirements: Article 292 requires employers to follow procedural due process - written notice specifying grounds for termination and opportunity to be heard.
 
-**YOUR LEGAL REMEDIES:**
+YOUR LEGAL REMEDIES:
 - File a complaint with DOLE for unpaid wages (money claims)
 - File an illegal dismissal case with NLRC
 - Seek reinstatement with full backwages
 - Claim moral and exemplary damages
 
-**JURISDICTION:**
+JURISDICTION:
 - DOLE: Money claims up to ₱5,000 per employee
 - NLRC: Illegal dismissal cases and higher money claims
 
