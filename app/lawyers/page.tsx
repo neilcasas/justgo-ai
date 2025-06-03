@@ -129,13 +129,15 @@ export default function LawyersPage() {
           <div className="flex justify-between items-center py-4">
             <Link href="/" className="flex items-center">
               <Scale className="h-6 w-6 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">LegalAI PH</span>
+              <span className="ml-2 text-xl font-bold text-gray-900">JustGo</span>
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/chat">
                 <Button variant="ghost">Legal Chat</Button>
               </Link>
-              <Button variant="outline">Profile</Button>
+              <Link href="/profile">
+                <Button variant="outline">Profile</Button>
+              </Link>
             </div>
           </div>
         </div>
