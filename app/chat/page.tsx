@@ -1,292 +1,267 @@
+"use client"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Scale, MessageSquare, FileText, Users, CheckCircle, Star } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Scale, Send, FileText, Download, User, Bot } from "lucide-react"
 import Link from "next/link"
 
-export default function LandingPage() {
+interface Message {
+  id: string
+  type: "user" | "ai" | "loading"
+  content: string
+  documents?: string[]
+  lawyers?: Array<{
+    id: string
+    name: string
+    specialization: string
+    rating: number
+  }>
+}
+
+const mockLegalResponse = {
+  advice:
+    "Based on your description, this appears to be a case of illegal dismissal under the Labor Code of the Philippines. You have the right to file a complaint with the Department of Labor and Employment (DOLE) or the National Labor Relations Commission (NLRC).",
+  documents: ["Complaint for Illegal Dismissal", "Position Paper", "Affidavit of Witnesses"],
+  lawyers: [
+    { id: "1", name: "Atty. Maria Santos", specialization: "Labor Law", rating: 4.8 },
+    { id: "2", name: "Atty. Juan Reyes", specialization: "Employment Law", rating: 4.9 },
+    { id: "3", name: "Atty. Ana Garcia", specialization: "Labor Relations", rating: 4.7 },
+  ],
+}
+
+export default function ChatPage() {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: "1",
+      type: "ai",
+      content:
+        "Hello! I'm your AI legal assistant. I can help you understand Philippine law, generate legal documents, and connect you with qualified lawyers. What legal issue can I help you with today?",
+    },
+  ])
+  const [input, setInput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSend = () => {
+    if (!input.trim() || isLoading) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      type: "user",
+      content: input,
+    }
+
+    const loadingMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      type: "loading",
+      content: "AI is analyzing your legal question...",
+    }
+
+    setMessages((prev) => [...prev, userMessage, loadingMessage])
+    setInput("")
+    setIsLoading(true)
+
+    // Simulate AI response delay
+    setTimeout(() => {
+      const aiMessage: Message = {
+        id: (Date.now() + 2).toString(),
+        type: "ai",
+        content: mockLegalResponse.advice,
+        documents: mockLegalResponse.documents,
+        lawyers: mockLegalResponse.lawyers,
+      }
+
+      setMessages((prev) => {
+        // Remove loading message and add AI response
+        const withoutLoading = prev.filter((msg) => msg.type !== "loading")
+        return [...withoutLoading, aiMessage]
+      })
+      setIsLoading(false)
+    }, 3000) // 3 second delay
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <Scale className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-2xl font-bold text-gray-900">LegalAI PH</span>
-            </div>
+          <div className="flex justify-between items-center py-4">
+            <Link href="/" className="flex items-center">
+              <Scale className="h-6 w-6 text-blue-600" />
+              <span className="ml-2 text-xl font-bold text-gray-900">LegalAI PH</span>
+            </Link>
             <div className="flex items-center space-x-4">
-              <Link href="/chat">
-                <Button variant="ghost">Get Legal Help</Button>
-              </Link>
               <Link href="/lawyers">
-                <Button variant="ghost">Find Lawyers</Button>
+                <Button variant="ghost">Browse Lawyers</Button>
               </Link>
-              <Link href="/login">
-                <Button>Sign In</Button>
-              </Link>
+              <Button variant="outline">Profile</Button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">AI-Powered Legal Assistance for the Philippines</h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Get instant legal advice, generate required documents, and connect with qualified lawyers - all in one
-            platform designed for Philippine law.
-          </p>
-          <div className="flex justify-center space-x-4">
-            <Link href="/chat">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Start Legal Chat
-              </Button>
-            </Link>
-            <Link href="/lawyers">
-              <Button size="lg" variant="outline">
-                Browse Lawyers
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Complete Legal Solution</h2>
-            <p className="text-lg text-gray-600">Everything you need for legal assistance in the Philippines</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <MessageSquare className="h-12 w-12 text-blue-600 mb-4" />
-                <CardTitle>AI Legal Advice</CardTitle>
-                <CardDescription>
-                  Get instant legal guidance based on Philippine law through our AI assistant
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">24/7 availability</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Philippine law expertise</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Instant responses</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <FileText className="h-12 w-12 text-blue-600 mb-4" />
-                <CardTitle>Document Generation</CardTitle>
-                <CardDescription>
-                  Automatically generate legal documents and forms required for your case
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Complaint forms</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Legal notices</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Contract templates</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <Users className="h-12 w-12 text-blue-600 mb-4" />
-                <CardTitle>Lawyer Marketplace</CardTitle>
-                <CardDescription>
-                  Connect with qualified lawyers and paralegals specializing in your legal area
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Verified professionals</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Specialization filtering</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                    <span className="text-sm">Affordable rates</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
-            <p className="text-lg text-gray-600">Get legal help in three simple steps</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                1
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Describe Your Problem</h3>
-              <p className="text-gray-600">Chat with our AI and explain your legal situation in plain language</p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                2
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Get AI Guidance</h3>
-              <p className="text-gray-600">Receive legal advice and automatically generated documents for your case</p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                3
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Connect with Lawyers</h3>
-              <p className="text-gray-600">
-                Get matched with qualified lawyers if you need professional representation
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">What Our Users Say</h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
+      <div className="max-w-4xl mx-auto p-4">
+        {/* Chat Messages */}
+        <div className="space-y-4 mb-6">
+          {messages.map((message) => (
+            <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                className={`flex items-start space-x-3 max-w-3xl ${message.type === "user" ? "flex-row-reverse space-x-reverse" : ""}`}
+              >
+                <div
+                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                    message.type === "user" ? "bg-blue-600" : "bg-gray-600"
+                  }`}
+                >
+                  {message.type === "user" ? (
+                    <User className="w-4 h-4 text-white" />
+                  ) : message.type === "loading" ? (
+                    <div className="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  ) : (
+                    <Bot className="w-4 h-4 text-white" />
+                  )}
                 </div>
-                <p className="text-gray-600 mb-4">
-                  "LegalAI PH helped me understand my employment rights and generated the complaint letter I needed. The
-                  lawyer recommendations were spot-on!"
-                </p>
-                <div className="font-semibold">Maria Santos</div>
-                <div className="text-sm text-gray-500">Small Business Owner</div>
-              </CardContent>
-            </Card>
+                <div
+                  className={`rounded-lg p-4 ${
+                    message.type === "user"
+                      ? "bg-blue-600 text-white"
+                      : message.type === "loading"
+                        ? "bg-gray-100 border shadow-sm animate-pulse"
+                        : "bg-white border shadow-sm"
+                  }`}
+                >
+                  <p className={`text-sm ${message.type === "loading" ? "text-gray-500 italic" : ""}`}>
+                    {message.content}
+                  </p>
 
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
+                  {/* Required Documents Section */}
+                  {message.documents && (
+                    <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+                        <FileText className="w-4 h-4 mr-2" />
+                        Required Documents
+                      </h4>
+                      <div className="space-y-2">
+                        {message.documents.map((doc, index) => (
+                          <div key={index} className="flex items-center justify-between">
+                            <span className="text-sm text-blue-800">{doc}</span>
+                            <Button size="sm" variant="outline" className="text-xs">
+                              <Download className="w-3 h-3 mr-1" />
+                              Generate
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Recommended Lawyers Section */}
+                  {message.lawyers && (
+                    <div className="mt-4 p-3 bg-green-50 rounded-lg">
+                      <h4 className="font-semibold text-green-900 mb-2">Recommended Lawyers</h4>
+                      <div className="space-y-2">
+                        {message.lawyers.map((lawyer) => (
+                          <div key={lawyer.id} className="flex items-center justify-between">
+                            <div>
+                              <div className="text-sm font-medium text-green-800">{lawyer.name}</div>
+                              <div className="text-xs text-green-600">
+                                {lawyer.specialization} • ⭐ {lawyer.rating}
+                              </div>
+                            </div>
+                            <Link href={`/lawyers/${lawyer.id}`}>
+                              <Button size="sm" variant="outline" className="text-xs">
+                                View Profile
+                              </Button>
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                      <Link href="/lawyers">
+                        <Button variant="link" className="text-xs text-green-600 p-0 mt-2">
+                          View all lawyers →
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
                 </div>
-                <p className="text-gray-600 mb-4">
-                  "As someone who couldn't afford a lawyer initially, this platform gave me the guidance I needed to
-                  understand my options."
-                </p>
-                <div className="font-semibold">Juan Dela Cruz</div>
-                <div className="text-sm text-gray-500">OFW</div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to Get Legal Help?</h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Join thousands of Filipinos who have found legal solutions through our platform
-          </p>
-          <Link href="/chat">
-            <Button size="lg" variant="secondary">
-              Start Your Legal Chat Now
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Scale className="h-6 w-6 text-blue-400" />
-                <span className="ml-2 text-xl font-bold">LegalAI PH</span>
               </div>
-              <p className="text-gray-400">
-                Making legal assistance accessible to all Filipinos through AI technology.
-              </p>
             </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Services</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>AI Legal Advice</li>
-                <li>Document Generation</li>
-                <li>Lawyer Matching</li>
-                <li>Legal Forms</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Legal Areas</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>Employment Law</li>
-                <li>Family Law</li>
-                <li>Criminal Law</li>
-                <li>Civil Law</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Contact</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>support@legalai.ph</li>
-                <li>+63 2 123 4567</li>
-                <li>Manila, Philippines</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 LegalAI PH. All rights reserved.</p>
-          </div>
+          ))}
         </div>
-      </footer>
+
+        {/* Input Area */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex space-x-2">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Describe your legal problem... (e.g., 'I was fired without notice from my job')"
+                onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                className="flex-1"
+              />
+              <Button onClick={handleSend} disabled={isLoading}>
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <Badge variant="secondary" className="cursor-pointer text-xs">
+                Employment Issues
+              </Badge>
+              <Badge variant="secondary" className="cursor-pointer text-xs">
+                Contract Disputes
+              </Badge>
+              <Badge variant="secondary" className="cursor-pointer text-xs">
+                Family Law
+              </Badge>
+              <Badge variant="secondary" className="cursor-pointer text-xs">
+                Criminal Defense
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <div className="grid md:grid-cols-3 gap-4 mt-6">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Document Templates</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-gray-600 mb-3">Generate common legal documents</p>
+              <Button size="sm" variant="outline" className="w-full">
+                Browse Templates
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Legal Resources</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-gray-600 mb-3">Learn about Philippine laws</p>
+              <Button size="sm" variant="outline" className="w-full">
+                View Resources
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Emergency Legal Aid</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-gray-600 mb-3">Urgent legal assistance</p>
+              <Button size="sm" variant="outline" className="w-full">
+                Get Help Now
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 }
