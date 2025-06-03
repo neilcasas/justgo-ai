@@ -1,26 +1,21 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Search, Star, MapPin, Award } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Search, Star, MapPin, Award, Building } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
 
 const mockLawyers = [
   {
     id: "1",
     name: "Atty. Maria Santos",
     specialization: "Labor Law",
+    organization: "Santos & Associates Law Firm",
     rating: 4.8,
     reviews: 127,
     experience: 12,
@@ -28,27 +23,28 @@ const mockLawyers = [
     rate: "₱2,500/hour",
     image: "/placeholder.svg?height=100&width=100",
     cases: ["Illegal Dismissal", "Wage Disputes", "Labor Relations"],
-    description:
-      "Specializes in employment law with extensive experience in labor disputes and employee rights.",
+    description: "Specializes in employment law with extensive experience in labor disputes and employee rights.",
   },
   {
     id: "2",
     name: "Atty. Juan Reyes",
     specialization: "Criminal Law",
+    organization: "Public Attorney's Office",
     rating: 4.9,
     reviews: 89,
     experience: 15,
     location: "Quezon City",
-    rate: "₱3,000/hour",
+    rate: "Free",
     image: "/placeholder.svg?height=100&width=100",
     cases: ["Criminal Defense", "Drug Cases", "Theft Cases"],
     description:
-      "Experienced criminal defense attorney with a strong track record in complex criminal cases.",
+      "Experienced criminal defense attorney providing free legal services through the Public Attorney's Office.",
   },
   {
     id: "3",
     name: "Atty. Ana Garcia",
     specialization: "Family Law",
+    organization: "Garcia Family Law Center",
     rating: 4.7,
     reviews: 156,
     experience: 10,
@@ -56,13 +52,13 @@ const mockLawyers = [
     rate: "₱2,000/hour",
     image: "/placeholder.svg?height=100&width=100",
     cases: ["Divorce", "Child Custody", "Adoption"],
-    description:
-      "Compassionate family law attorney helping families navigate difficult legal situations.",
+    description: "Compassionate family law attorney helping families navigate difficult legal situations.",
   },
   {
     id: "4",
     name: "Atty. Carlos Mendoza",
     specialization: "Civil Law",
+    organization: "Mendoza & Partners",
     rating: 4.6,
     reviews: 203,
     experience: 18,
@@ -70,42 +66,37 @@ const mockLawyers = [
     rate: "₱2,800/hour",
     image: "/placeholder.svg?height=100&width=100",
     cases: ["Contract Disputes", "Property Law", "Tort Claims"],
-    description:
-      "Civil litigation expert with extensive experience in contract and property disputes.",
+    description: "Civil litigation expert with extensive experience in contract and property disputes.",
   },
   {
     id: "5",
     name: "Atty. Rosa Dela Cruz",
     specialization: "Corporate Law",
+    organization: "SyCip Salazar Hernandez & Gatmaitan",
     rating: 4.8,
     reviews: 94,
     experience: 14,
     location: "BGC, Taguig",
     rate: "₱4,000/hour",
     image: "/placeholder.svg?height=100&width=100",
-    cases: [
-      "Business Formation",
-      "Mergers & Acquisitions",
-      "Corporate Compliance",
-    ],
-    description:
-      "Corporate law specialist helping businesses with legal compliance and transactions.",
+    cases: ["Business Formation", "Mergers & Acquisitions", "Corporate Compliance"],
+    description: "Corporate law specialist helping businesses with legal compliance and transactions.",
   },
   {
     id: "6",
     name: "Atty. Miguel Torres",
     specialization: "Immigration Law",
+    organization: "Legal Aid Foundation",
     rating: 4.5,
     reviews: 67,
     experience: 8,
     location: "Cebu City",
-    rate: "₱2,200/hour",
+    rate: "Free",
     image: "/placeholder.svg?height=100&width=100",
     cases: ["Visa Applications", "Deportation Defense", "Citizenship"],
-    description:
-      "Immigration law expert helping clients with visa applications and citizenship matters.",
+    description: "Immigration law expert providing free legal assistance through Legal Aid Foundation.",
   },
-];
+]
 
 const specializations = [
   "All Specializations",
@@ -115,31 +106,28 @@ const specializations = [
   "Civil Law",
   "Corporate Law",
   "Immigration Law",
-];
+]
 
 export default function LawyersPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSpecialization, setSelectedSpecialization] = useState(
-    "All Specializations"
-  );
-  const [sortBy, setSortBy] = useState("rating");
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedSpecialization, setSelectedSpecialization] = useState("All Specializations")
+  const [sortBy, setSortBy] = useState("rating")
 
   const filteredLawyers = mockLawyers
     .filter((lawyer) => {
       const matchesSearch =
         lawyer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lawyer.specialization.toLowerCase().includes(searchTerm.toLowerCase());
+        lawyer.specialization.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesSpecialization =
-        selectedSpecialization === "All Specializations" ||
-        lawyer.specialization === selectedSpecialization;
-      return matchesSearch && matchesSpecialization;
+        selectedSpecialization === "All Specializations" || lawyer.specialization === selectedSpecialization
+      return matchesSearch && matchesSpecialization
     })
     .sort((a, b) => {
-      if (sortBy === "rating") return b.rating - a.rating;
-      if (sortBy === "experience") return b.experience - a.experience;
-      if (sortBy === "reviews") return b.reviews - a.reviews;
-      return 0;
-    });
+      if (sortBy === "rating") return b.rating - a.rating
+      if (sortBy === "experience") return b.experience - a.experience
+      if (sortBy === "reviews") return b.reviews - a.reviews
+      return 0
+    })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -148,12 +136,7 @@ export default function LawyersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-1">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="JustGo Logo"
-                width={150}
-                height={60}
-              />
+              <Image src="/logo.png" alt="JustGo Logo" width={150} height={60} />
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/chat">
@@ -168,12 +151,8 @@ export default function LawyersPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Find Legal Professionals
-          </h1>
-          <p className="text-gray-600">
-            Connect with qualified lawyers and paralegals in the Philippines
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Find Legal Professionals</h1>
+          <p className="text-gray-600">Connect with qualified lawyers and paralegals in the Philippines</p>
         </div>
 
         {/* Filters */}
@@ -190,10 +169,7 @@ export default function LawyersPage() {
                 />
               </div>
 
-              <Select
-                value={selectedSpecialization}
-                onValueChange={setSelectedSpecialization}
-              >
+              <Select value={selectedSpecialization} onValueChange={setSelectedSpecialization}>
                 <SelectTrigger>
                   <SelectValue placeholder="Specialization" />
                 </SelectTrigger>
@@ -226,8 +202,7 @@ export default function LawyersPage() {
         <div className="mb-6">
           <p className="text-gray-600">
             Showing {filteredLawyers.length} lawyers
-            {selectedSpecialization !== "All Specializations" &&
-              ` specializing in ${selectedSpecialization}`}
+            {selectedSpecialization !== "All Specializations" && ` specializing in ${selectedSpecialization}`}
           </p>
         </div>
 
@@ -256,11 +231,9 @@ export default function LawyersPage() {
                   <div className="flex items-center">
                     <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
                     <span className="font-medium">{lawyer.rating}</span>
-                    <span className="text-gray-500 ml-1">
-                      ({lawyer.reviews} reviews)
-                    </span>
+                    <span className="text-gray-500 ml-1">({lawyer.reviews} reviews)</span>
                   </div>
-                  <span className="font-medium text-blue-600">
+                  <span className={`font-medium ${lawyer.rate === "Free" ? "text-green-600" : "text-blue-600"}`}>
                     {lawyer.rate}
                   </span>
                 </div>
@@ -275,9 +248,12 @@ export default function LawyersPage() {
                   <span>{lawyer.location}</span>
                 </div>
 
-                <p className="text-sm text-gray-600 line-clamp-2">
-                  {lawyer.description}
-                </p>
+                <div className="flex items-center text-sm text-gray-600">
+                  <Building className="h-4 w-4 mr-2" />
+                  <span>{lawyer.organization}</span>
+                </div>
+
+                <p className="text-sm text-gray-600 line-clamp-2">{lawyer.description}</p>
 
                 <div className="flex flex-wrap gap-1">
                   {lawyer.cases.slice(0, 2).map((caseType, index) => (
@@ -313,5 +289,5 @@ export default function LawyersPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
