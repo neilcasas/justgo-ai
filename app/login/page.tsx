@@ -1,9 +1,15 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Scale } from "lucide-react"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -11,11 +17,12 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
-            <Scale className="h-8 w-8 text-blue-600" />
-            <span className="ml-2 text-2xl font-bold text-gray-900">LegalAI PH</span>
+            <Image src="/logo.png" alt="Logo" width={400} height={400} />
           </div>
           <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>Sign in to access your legal assistance dashboard</CardDescription>
+          <CardDescription>
+            Sign in to access your legal assistance dashboard
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -27,20 +34,26 @@ export default function LoginPage() {
             <Input id="password" type="password" />
           </div>
           <Link href="/chat">
-            <Button className="w-full">Sign In</Button>
+            <Button className="w-full mt-10">Sign In</Button>
           </Link>
           <div className="text-center">
-            <Link href="/signup" className="text-sm text-blue-600 hover:underline">
+            <Link
+              href="/signup"
+              className="text-sm text-blue-600 hover:underline"
+            >
               Don't have an account? Sign up
             </Link>
           </div>
           <div className="text-center">
-            <Link href="/chat" className="text-sm text-gray-600 hover:underline">
+            <Link
+              href="/chat"
+              className="text-sm text-gray-600 hover:underline"
+            >
               Continue as Guest
             </Link>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
