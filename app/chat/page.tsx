@@ -260,8 +260,7 @@ export default function ChatPage() {
     const loadingMessage: Message = {
       id: (Date.now() + 1).toString(),
       type: "loading",
-      content:
-        "Analyzing your labor law case and reviewing relevant Philippine employment laws...",
+      content: "Analyzing your case and reviewing relevant Philippine laws...",
     };
 
     setMessages((prev) => [...prev, userMessage, loadingMessage]);
@@ -588,22 +587,22 @@ export default function ChatPage() {
                 className="cursor-pointer text-xs"
                 onClick={() =>
                   setInput(
-                    "I'm being forced to work overtime without compensation."
+                    "What are the legal requirements for starting a business in the Philippines?"
                   )
                 }
               >
-                Unpaid Overtime
+                Startnig a Business
               </Badge>
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-xs"
                 onClick={() =>
                   setInput(
-                    "I'm experiencing workplace harassment from my supervisor."
+                    "What laws pertain to animal abuse in the Philippines?"
                   )
                 }
               >
-                Workplace Harassment
+                Animal Abuse
               </Badge>
             </div>
           </CardContent>
