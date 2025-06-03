@@ -174,7 +174,7 @@ export default function ChatPage() {
       id: "1",
       type: "ai",
       content:
-        "Hello Bryan! I'm your AI legal assistant specializing in Philippine labor law. I can help you understand your rights, generate legal documents, and connect you with qualified lawyers. What specific workplace issue can I help you with today?",
+        "Hello! I'm your AI legal assistant specializing in Philippine labor law. I can help you understand your rights, generate legal documents, and connect you with qualified lawyers. What specific workplace issue can I help you with today?",
     },
   ])
   const [input, setInput] = useState("")
@@ -195,49 +195,6 @@ export default function ChatPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
-
-  // Simulate Bryan's initial message on component mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleBryanInitialMessage()
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [])
-
-  const handleBryanInitialMessage = () => {
-    const bryanMessage: Message = {
-      id: "bryan-initial",
-      type: "user",
-      content:
-        "Hi, I'm Bryan. I have a serious problem with my former employer. They fired me last month without any valid reason and they still haven't paid my salary for the last two weeks I worked. I think this is illegal but I don't know what to do. Can you help me understand my rights and what documents I need to file a case?",
-    }
-
-    const loadingMessage: Message = {
-      id: "loading-bryan",
-      type: "loading",
-      content: "Analyzing your labor law case and reviewing relevant Philippine employment laws...",
-    }
-
-    setMessages((prev) => [...prev, bryanMessage, loadingMessage])
-    setIsLoading(true)
-
-    // Simulate AI analysis delay
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: "ai-bryan-response",
-        type: "ai",
-        content: bryanLegalResponse.advice,
-        documents: bryanLegalResponse.documents,
-        lawyers: bryanLegalResponse.lawyers,
-      }
-
-      setMessages((prev) => {
-        const withoutLoading = prev.filter((msg) => msg.id !== "loading-bryan")
-        return [...withoutLoading, aiResponse]
-      })
-      setIsLoading(false)
-    }, 4000)
-  }
 
   // Progress bar animation for document generation
   useEffect(() => {
@@ -276,29 +233,51 @@ export default function ChatPage() {
     const loadingMessage: Message = {
       id: (Date.now() + 1).toString(),
       type: "loading",
-      content: "Analyzing your legal question and researching relevant laws...",
+      content: "Analyzing your labor law case and reviewing relevant Philippine employment laws...",
     }
 
     setMessages((prev) => [...prev, userMessage, loadingMessage])
     setInput("")
     setIsLoading(true)
 
-    // Simulate AI response delay
+    // Check if this is Bryan's specific case about unpaid salary and unjust termination
+    const isBryanCase =
+      input.toLowerCase().includes("unpaid") &&
+      (input.toLowerCase().includes("salary") || input.toLowerCase().includes("wage")) &&
+      (input.toLowerCase().includes("fired") ||
+        input.toLowerCase().includes("terminated") ||
+        input.toLowerCase().includes("dismissal"))
+
+    // Simulate AI analysis delay
     setTimeout(() => {
-      const aiMessage: Message = {
-        id: (Date.now() + 2).toString(),
-        type: "ai",
-        content:
-          "I understand your concern. Based on your additional question, I recommend consulting with one of the labor law specialists I mentioned earlier. They can provide more specific guidance for your unique situation.",
-        lawyers: bryanLegalResponse.lawyers,
+      let aiResponse: Message
+
+      if (isBryanCase) {
+        // Bryan's specific case response
+        aiResponse = {
+          id: (Date.now() + 2).toString(),
+          type: "ai",
+          content: bryanLegalResponse.advice,
+          documents: bryanLegalResponse.documents,
+          lawyers: bryanLegalResponse.lawyers,
+        }
+      } else {
+        // Generic response for other queries
+        aiResponse = {
+          id: (Date.now() + 2).toString(),
+          type: "ai",
+          content:
+            "I understand your concern. Based on your question, I recommend consulting with one of our qualified labor law specialists who can provide more specific guidance for your unique situation. Could you provide more details about your specific workplace issue so I can give you more targeted advice?",
+          lawyers: bryanLegalResponse.lawyers,
+        }
       }
 
       setMessages((prev) => {
         const withoutLoading = prev.filter((msg) => msg.type !== "loading")
-        return [...withoutLoading, aiMessage]
+        return [...withoutLoading, aiResponse]
       })
       setIsLoading(false)
-    }, 3000)
+    }, 4000)
   }
 
   const handleGenerateDocument = (documentType: string) => {
@@ -502,7 +481,7 @@ export default function ChatPage() {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask follow-up questions about your case..."
+                placeholder="Describe your legal problem... (e.g., 'I was fired without notice and my employer hasn't paid my salary')"
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 className="flex-1"
               />
@@ -514,23 +493,32 @@ export default function ChatPage() {
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-xs"
-                onClick={() => setInput("How long do I have to file a complaint with DOLE?")}
+                onClick={() =>
+                  setInput("I was fired without notice and my employer hasn't paid my last salary. What are my rights?")
+                }
               >
-                Filing Deadlines
+                Unpaid Salary & Termination
               </Badge>
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-xs"
-                onClick={() => setInput("What compensation can I expect if I win my case?")}
+                onClick={() => setInput("My employer terminated me without any valid reason and due process.")}
               >
-                Expected Compensation
+                Illegal Dismissal
               </Badge>
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-xs"
-                onClick={() => setInput("Can my employer retaliate against me for filing a complaint?")}
+                onClick={() => setInput("I'm being forced to work overtime without compensation.")}
               >
-                Retaliation Protection
+                Unpaid Overtime
+              </Badge>
+              <Badge
+                variant="secondary"
+                className="cursor-pointer text-xs"
+                onClick={() => setInput("I'm experiencing workplace harassment from my supervisor.")}
+              >
+                Workplace Harassment
               </Badge>
             </div>
           </CardContent>
