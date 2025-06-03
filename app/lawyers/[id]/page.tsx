@@ -1,11 +1,21 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Star, MapPin, Clock, Award, Phone, Mail, Calendar, CheckCircle, Building } from "lucide-react"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import Image from "next/image"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Star,
+  MapPin,
+  Clock,
+  Award,
+  Phone,
+  Mail,
+  Calendar,
+  CheckCircle,
+  Building,
+} from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import Image from "next/image";
 
 // Mock data for multiple lawyer profiles
 const lawyerProfiles = {
@@ -19,7 +29,8 @@ const lawyerProfiles = {
     experience: 12,
     location: "Makati City",
     rate: "₱2,500/hour",
-    image: "/placeholder.svg?height=200&width=200",
+    image:
+      "https://images.squarespace-cdn.com/content/v1/541a0730e4b000f167faa35c/1474850119827-CYB63G9V2ALJORH7BXJU/UYeQHpHT.jpeg?format=1000w",
     phone: "+63 917 123 4567",
     email: "maria.santos@lawfirm.ph",
     description:
@@ -53,7 +64,8 @@ const lawyerProfiles = {
         title: "Wage Dispute - Manufacturing Firm",
         outcome: "Settled",
         year: "2023",
-        description: "Negotiated favorable settlement for unpaid overtime wages for 50+ employees.",
+        description:
+          "Negotiated favorable settlement for unpaid overtime wages for 50+ employees.",
       },
       {
         title: "Labor Relations - Retail Chain",
@@ -74,13 +86,15 @@ const lawyerProfiles = {
       {
         name: "Maria Garcia",
         rating: 5,
-        comment: "Excellent lawyer! She explained everything clearly and kept me updated throughout the process.",
+        comment:
+          "Excellent lawyer! She explained everything clearly and kept me updated throughout the process.",
         date: "2023-12-10",
       },
       {
         name: "Carlos Mendoza",
         rating: 4,
-        comment: "Very competent and experienced. Would recommend for any labor law issues.",
+        comment:
+          "Very competent and experienced. Would recommend for any labor law issues.",
         date: "2023-11-20",
       },
     ],
@@ -95,7 +109,8 @@ const lawyerProfiles = {
     experience: 15,
     location: "Quezon City",
     rate: "Free",
-    image: "/placeholder.svg?height=200&width=200",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ4H58PvehoVhA-9l7dscQFIqJUZr10-uHdg&s",
     phone: "+63 917 234 5678",
     email: "juan.reyes@pao.gov.ph",
     description:
@@ -129,32 +144,37 @@ const lawyerProfiles = {
         title: "Corporate Fraud Case",
         outcome: "Settled",
         year: "2023",
-        description: "Negotiated plea agreement for corporate executive in fraud case, avoiding jail time.",
+        description:
+          "Negotiated plea agreement for corporate executive in fraud case, avoiding jail time.",
       },
       {
         title: "Cybercrime Defense",
         outcome: "Won",
         year: "2023",
-        description: "Defended client against cybercrime charges, secured acquittal through technical defense.",
+        description:
+          "Defended client against cybercrime charges, secured acquittal through technical defense.",
       },
     ],
     clientReviews: [
       {
         name: "Roberto Silva",
         rating: 5,
-        comment: "Atty. Reyes saved my life. His expertise in criminal law is unmatched. Highly recommended!",
+        comment:
+          "Atty. Reyes saved my life. His expertise in criminal law is unmatched. Highly recommended!",
         date: "2024-02-10",
       },
       {
         name: "Ana Morales",
         rating: 5,
-        comment: "Professional and dedicated. He fought hard for my case and achieved the best possible outcome.",
+        comment:
+          "Professional and dedicated. He fought hard for my case and achieved the best possible outcome.",
         date: "2024-01-20",
       },
       {
         name: "Miguel Torres",
         rating: 4,
-        comment: "Excellent criminal lawyer. Very knowledgeable about the law and court procedures.",
+        comment:
+          "Excellent criminal lawyer. Very knowledgeable about the law and court procedures.",
         date: "2023-12-15",
       },
     ],
@@ -169,7 +189,9 @@ const lawyerProfiles = {
     experience: 10,
     location: "Manila",
     rate: "₱2,000/hour",
-    image: "/placeholder.svg?height=200&width=200",
+    image:
+      "https://www.manilatimes.net/manilatimes/uploads/images/2023/05/06/188375.jpg",
+
     phone: "+63 917 345 6789",
     email: "ana.garcia@familylaw.ph",
     description:
@@ -196,55 +218,62 @@ const lawyerProfiles = {
         title: "Child Custody Dispute",
         outcome: "Won",
         year: "2024",
-        description: "Secured primary custody for mother in complex custody dispute involving international elements.",
+        description:
+          "Secured primary custody for mother in complex custody dispute involving international elements.",
       },
       {
         title: "Annulment Case",
         outcome: "Won",
         year: "2023",
-        description: "Successfully obtained annulment for client based on psychological incapacity grounds.",
+        description:
+          "Successfully obtained annulment for client based on psychological incapacity grounds.",
       },
       {
         title: "Adoption Proceedings",
         outcome: "Won",
         year: "2023",
-        description: "Facilitated smooth adoption process for family adopting internationally.",
+        description:
+          "Facilitated smooth adoption process for family adopting internationally.",
       },
     ],
     clientReviews: [
       {
         name: "Carmen Lopez",
         rating: 5,
-        comment: "Atty. Garcia was incredibly supportive during my divorce. She made a difficult time much easier.",
+        comment:
+          "Atty. Garcia was incredibly supportive during my divorce. She made a difficult time much easier.",
         date: "2024-01-25",
       },
       {
         name: "Pedro Ramos",
         rating: 5,
-        comment: "Helped us with our adoption case. Very patient and understanding throughout the process.",
+        comment:
+          "Helped us with our adoption case. Very patient and understanding throughout the process.",
         date: "2023-12-30",
       },
       {
         name: "Lisa Santos",
         rating: 4,
-        comment: "Professional and caring. She really understands family dynamics and legal complexities.",
+        comment:
+          "Professional and caring. She really understands family dynamics and legal complexities.",
         date: "2023-11-10",
       },
     ],
   },
-}
+};
 
 interface LawyerProfilePageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
-  const lawyerProfile = lawyerProfiles[params.id as keyof typeof lawyerProfiles]
+  const lawyerProfile =
+    lawyerProfiles[params.id as keyof typeof lawyerProfiles];
 
   if (!lawyerProfile) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -254,7 +283,12 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-1">
             <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="JustGo Logo" width={150} height={60} />
+              <Image
+                src="/logo.png"
+                alt="JustGo Logo"
+                width={150}
+                height={60}
+              />
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/chat">
@@ -282,7 +316,9 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
                     className="w-32 h-32 rounded-full object-cover"
                   />
                   <div className="flex-1">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{lawyerProfile.name}</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                      {lawyerProfile.name}
+                    </h1>
                     <Badge variant="secondary" className="mb-4">
                       {lawyerProfile.specialization}
                     </Badge>
@@ -290,8 +326,12 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
                     <div className="grid md:grid-cols-2 gap-4 mb-4">
                       <div className="flex items-center text-sm text-gray-600">
                         <Star className="h-4 w-4 text-yellow-400 fill-current mr-2" />
-                        <span className="font-medium">{lawyerProfile.rating}</span>
-                        <span className="ml-1">({lawyerProfile.reviews} reviews)</span>
+                        <span className="font-medium">
+                          {lawyerProfile.rating}
+                        </span>
+                        <span className="ml-1">
+                          ({lawyerProfile.reviews} reviews)
+                        </span>
                       </div>
 
                       <div className="flex items-center text-sm text-gray-600">
@@ -307,7 +347,11 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
                       <div className="flex items-center text-sm text-gray-600">
                         <Clock className="h-4 w-4 mr-2" />
                         <span
-                          className={`font-medium ${lawyerProfile.rate === "Free" ? "text-green-600" : "text-blue-600"}`}
+                          className={`font-medium ${
+                            lawyerProfile.rate === "Free"
+                              ? "text-green-600"
+                              : "text-blue-600"
+                          }`}
                         >
                           {lawyerProfile.rate}
                         </span>
@@ -319,7 +363,9 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
                       </div>
                     </div>
 
-                    <p className="text-gray-600 mb-4">{lawyerProfile.description}</p>
+                    <p className="text-gray-600 mb-4">
+                      {lawyerProfile.description}
+                    </p>
 
                     <div className="flex space-x-3">
                       <Button>
@@ -367,8 +413,16 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-semibold">{case_.title}</h4>
                       <div className="flex items-center space-x-2">
-                        <Badge variant={case_.outcome === "Won" ? "default" : "secondary"}>{case_.outcome}</Badge>
-                        <span className="text-sm text-gray-500">{case_.year}</span>
+                        <Badge
+                          variant={
+                            case_.outcome === "Won" ? "default" : "secondary"
+                          }
+                        >
+                          {case_.outcome}
+                        </Badge>
+                        <span className="text-sm text-gray-500">
+                          {case_.year}
+                        </span>
                       </div>
                     </div>
                     <p className="text-sm text-gray-600">{case_.description}</p>
@@ -390,14 +444,21 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
                         <span className="font-medium">{review.name}</span>
                         <div className="flex">
                           {Array.from({ length: review.rating }).map((_, i) => (
-                            <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
+                            <Star
+                              key={i}
+                              className="h-4 w-4 text-yellow-400 fill-current"
+                            />
                           ))}
                         </div>
                       </div>
-                      <span className="text-sm text-gray-500">{review.date}</span>
+                      <span className="text-sm text-gray-500">
+                        {review.date}
+                      </span>
                     </div>
                     <p className="text-sm text-gray-600">{review.comment}</p>
-                    {index < lawyerProfile.clientReviews.length - 1 && <Separator className="mt-4" />}
+                    {index < lawyerProfile.clientReviews.length - 1 && (
+                      <Separator className="mt-4" />
+                    )}
                   </div>
                 ))}
               </CardContent>
@@ -483,5 +544,5 @@ export default function LawyerProfilePage({ params }: LawyerProfilePageProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

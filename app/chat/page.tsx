@@ -121,26 +121,26 @@ You have strong grounds for both complaints, Bryan. The law is clearly on your s
 
   demandLetterContent: `DEMAND LETTER
 
-Date: [Current Date]
+Date: July 15, 2025
 
 [EMPLOYER NAME]
 [POSITION/TITLE]
-[COMPANY NAME]
-[COMPANY ADDRESS]
+ACME CO.
+QUEZON CITY, PHILIPPINES
 
 Dear Sir/Madam:
 
 SUBJECT: DEMAND FOR PAYMENT OF UNPAID WAGES AND REINSTATEMENT DUE TO ILLEGAL DISMISSAL
 
-I am BRYAN [SURNAME], former employee of [COMPANY NAME], where I worked as [POSITION] from [START DATE] until my illegal termination on [TERMINATION DATE].
+I am BRYAN MAZINO, former employee of ACME CO., where I worked as FAST FOOD WORKER from MAY 19, 2023 until my illegal termination on JUNE 15, 2025.
 
 I am writing this formal demand letter to address two serious violations of the Labor Code of the Philippines:
 
 I. UNPAID WAGES
 
 As of my termination date, I have not received my salary for the following period(s):
-- [SPECIFY UNPAID PERIOD]
-- Total Amount Due: ₱[AMOUNT]
+- APRIL 1, 2025 to JUNE 15, 2025 
+- Total Amount Due: ₱26,000
 
 This constitutes a clear violation of Article 103 of the Labor Code, which mandates payment of wages at least once every two weeks or twice a month.
 
@@ -156,7 +156,7 @@ DEMANDS:
 
 Based on the foregoing violations, I hereby demand:
 
-1. IMMEDIATE PAYMENT of my unpaid wages amounting to ₱[AMOUNT]
+1. IMMEDIATE PAYMENT of my unpaid wages amounting to ₱26,000
 2. REINSTATEMENT to my former position without loss of seniority rights and other benefits
 3. PAYMENT OF BACKWAGES from the date of illegal dismissal until actual reinstatement
 4. PAYMENT OF 13th MONTH PAY and other monetary benefits due
@@ -179,9 +179,9 @@ I trust that you will give this matter your immediate attention to avoid unneces
 
 Very truly yours,
 
-BRYAN [SURNAME]
-[CONTACT NUMBER]
-[EMAIL ADDRESS]
+BRYAN MAZINO
++63 912 345 6789
+STA. MESA HEIGHTS, QUEZON CITY, PHILIPPINES
 [SIGNATURE OVER PRINTED NAME]
 
 RECEIVED BY:
