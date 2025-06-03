@@ -1,11 +1,14 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Scale, Send, FileText, Download, User, Bot, Loader2 } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import { Scale, Send, FileText, Download, User, Bot, Loader2, Upload, X, File } from "lucide-react"
 import Link from "next/link"
 import {
   Dialog,
@@ -20,7 +23,10 @@ interface Message {
   id: string
   type: "user" | "ai" | "loading"
   content: string
-  documents?: string[]
+  documents?: {
+    required: string[]
+    aiGenerated: string[]
+  }
   lawyers?: Array<{
     id: string
     name: string
@@ -30,72 +36,136 @@ interface Message {
 }
 
 interface DocumentGenerationState {
-  isGenerating: boolean
+  isOpen: boolean
   documentType: string | null
+  isGenerating: boolean
   progress: number
   isComplete: boolean
   documentContent?: string
+  uploadedFiles: File[]
+  showFileUpload: boolean
 }
 
 // Bryan's specific legal response
 const bryanLegalResponse = {
-  advice: `Based on your situation, Bryan, you're dealing with two separate but related labor issues under Philippine law:
+  advice: `Hello Bryan, I've analyzed your situation regarding unpaid salary and unjust termination. Based on Philippine labor laws, here's my assessment:
 
-1. **Unpaid Salary**: Under the Labor Code of the Philippines (Presidential Decree No. 442), specifically Articles 128 and 129, employers are required to pay employees their wages on time and in full. The Department of Labor and Employment (DOLE) has jurisdiction over unpaid wage claims.
+**LEGAL ANALYSIS:**
 
-2. **Unjust Termination**: Article 279 (now Article 294) of the Labor Code protects employees from being dismissed without just or authorized causes. If you were terminated without due process or valid reason, this constitutes illegal dismissal.
+1. **Unpaid Salary Violation**: Under Article 103 of the Labor Code of the Philippines (Presidential Decree No. 442), wages must be paid at least once every two weeks or twice a month. Your employer's failure to pay your salary constitutes a violation of this provision.
 
-You have the right to file complaints with DOLE for both issues. For the unpaid salary, you can file a money claim, and for the unjust termination, you can file an illegal dismissal case with the National Labor Relations Commission (NLRC).`,
-  documents: [
-    "Demand Letter for Unpaid Wages and Illegal Dismissal",
-    "DOLE Single Entry Approach (SEnA) Request Form",
-    "NLRC Complaint Form for Illegal Dismissal",
-    "Affidavit of Circumstances of Termination",
-  ],
-  aiGeneratedDocuments: ["Demand Letter for Unpaid Wages and Illegal Dismissal"],
+2. **Unjust Termination**: Article 294 (formerly Article 279) of the Labor Code provides security of tenure to employees. Termination without just or authorized cause and without due process constitutes illegal dismissal.
+
+3. **Due Process Requirements**: Article 292 requires employers to follow procedural due process - written notice specifying grounds for termination and opportunity to be heard.
+
+**YOUR LEGAL REMEDIES:**
+- File a complaint with DOLE for unpaid wages (money claims)
+- File an illegal dismissal case with NLRC
+- Seek reinstatement with full backwages
+- Claim moral and exemplary damages
+
+**JURISDICTION:**
+- DOLE: Money claims up to ₱5,000 per employee
+- NLRC: Illegal dismissal cases and higher money claims
+
+You have strong grounds for both complaints, Bryan. The law is clearly on your side.`,
+
+  documents: {
+    required: [
+      "Employment Contract or Job Offer Letter",
+      "Company ID or Employment Certificate",
+      "Payslips or Salary Records",
+      "Termination Letter or Notice (if any)",
+      "Witnesses' Contact Information",
+      "Bank Statements showing salary deposits",
+    ],
+    aiGenerated: [
+      "Demand Letter for Unpaid Wages and Illegal Dismissal",
+      "DOLE Complaint Form (SENA Request)",
+      "NLRC Position Paper Draft",
+      "Affidavit of Illegal Dismissal",
+    ],
+  },
+
   lawyers: [
     { id: "1", name: "Atty. Maria Santos", specialization: "Labor Law", rating: 4.8 },
     { id: "2", name: "Atty. Juan Reyes", specialization: "Employment Law", rating: 4.9 },
     { id: "3", name: "Atty. Ana Garcia", specialization: "Labor Relations", rating: 4.7 },
   ],
-  demandLetterContent: `
-DEMAND LETTER
 
-[DATE]
+  demandLetterContent: `DEMAND LETTER
+
+Date: [Current Date]
 
 [EMPLOYER NAME]
+[POSITION/TITLE]
 [COMPANY NAME]
 [COMPANY ADDRESS]
 
-SUBJECT: DEMAND FOR PAYMENT OF UNPAID WAGES AND REINSTATEMENT
-
 Dear Sir/Madam:
 
-I, Bryan [Last Name], am writing this letter to formally demand the payment of my unpaid wages and my reinstatement to my position as [POSITION] in your company, where I was employed from [START DATE] until my unjust termination on [TERMINATION DATE].
+SUBJECT: DEMAND FOR PAYMENT OF UNPAID WAGES AND REINSTATEMENT DUE TO ILLEGAL DISMISSAL
 
-UNPAID WAGES:
-As of the date of my termination, I have not received my salary for the period of [UNPAID PERIOD], amounting to [AMOUNT]. This is in direct violation of the Labor Code of the Philippines, specifically Articles 128 and 129, which mandate the timely and complete payment of wages to employees.
+I am BRYAN [SURNAME], former employee of [COMPANY NAME], where I worked as [POSITION] from [START DATE] until my illegal termination on [TERMINATION DATE].
 
-UNJUST TERMINATION:
-Furthermore, I was terminated from my position without just or authorized cause and without due process, in violation of Article 294 (formerly Article 279) of the Labor Code. I was not provided with a written notice stating the cause of my termination, nor was I given an opportunity to explain my side.
+I am writing this formal demand letter to address two serious violations of the Labor Code of the Philippines:
 
-DEMAND:
-In light of the above, I am demanding the following:
+I. UNPAID WAGES
 
-1. Immediate payment of my unpaid wages amounting to [AMOUNT]
-2. Reinstatement to my former position without loss of seniority rights
-3. Payment of backwages from the date of my termination until actual reinstatement
+As of my termination date, I have not received my salary for the following period(s):
+- [SPECIFY UNPAID PERIOD]
+- Total Amount Due: ₱[AMOUNT]
 
-I am giving you five (5) days from receipt of this letter to comply with my demands. Should you fail to do so, I will be constrained to take appropriate legal action, including but not limited to filing complaints with the Department of Labor and Employment (DOLE) and the National Labor Relations Commission (NLRC).
+This constitutes a clear violation of Article 103 of the Labor Code, which mandates payment of wages at least once every two weeks or twice a month.
 
-I hope for your immediate and favorable response to avoid any legal proceedings.
+II. ILLEGAL DISMISSAL
 
-Sincerely,
+I was terminated from my employment without:
+1. Just or authorized cause as enumerated in Articles 297-298 of the Labor Code
+2. Due process as required under Article 292 (written notice and opportunity to be heard)
 
-Bryan [Last Name]
+This termination violates Article 294 of the Labor Code, which guarantees security of tenure to all employees.
+
+DEMANDS:
+
+Based on the foregoing violations, I hereby demand:
+
+1. IMMEDIATE PAYMENT of my unpaid wages amounting to ₱[AMOUNT]
+2. REINSTATEMENT to my former position without loss of seniority rights and other benefits
+3. PAYMENT OF BACKWAGES from the date of illegal dismissal until actual reinstatement
+4. PAYMENT OF 13th MONTH PAY and other monetary benefits due
+5. MORAL AND EXEMPLARY DAMAGES for the mental anguish and suffering caused
+
+LEGAL BASIS:
+- Presidential Decree No. 442 (Labor Code of the Philippines)
+- Articles 103, 292, 294, 297-298
+- DOLE Department Order No. 147-15
+- Relevant jurisprudence on illegal dismissal
+
+I am giving you FIVE (5) CALENDAR DAYS from receipt of this letter to comply with the above demands. Failure to do so will constrain me to:
+
+1. File appropriate complaints with the Department of Labor and Employment (DOLE)
+2. File an illegal dismissal case with the National Labor Relations Commission (NLRC)
+3. Pursue all legal remedies available under the law
+4. Seek attorney's fees and litigation expenses
+
+I trust that you will give this matter your immediate attention to avoid unnecessary legal proceedings.
+
+Very truly yours,
+
+BRYAN [SURNAME]
 [CONTACT NUMBER]
 [EMAIL ADDRESS]
-  `,
+[SIGNATURE OVER PRINTED NAME]
+
+RECEIVED BY:
+_________________________
+Signature over Printed Name
+Position/Title
+Date: _______________
+
+---
+Note: This demand letter was generated by LegalAI PH based on the uploaded documents and case details provided. Please review and customize as needed before sending.`,
 }
 
 export default function ChatPage() {
@@ -104,23 +174,70 @@ export default function ChatPage() {
       id: "1",
       type: "ai",
       content:
-        "Hello Bryan! I'm your AI legal assistant. I can help you understand Philippine labor laws, generate legal documents, and connect you with qualified lawyers. What specific legal issue can I help you with today?",
+        "Hello Bryan! I'm your AI legal assistant specializing in Philippine labor law. I can help you understand your rights, generate legal documents, and connect you with qualified lawyers. What specific workplace issue can I help you with today?",
     },
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [documentGeneration, setDocumentGeneration] = useState<DocumentGenerationState>({
-    isGenerating: false,
+    isOpen: false,
     documentType: null,
+    isGenerating: false,
     progress: 0,
     isComplete: false,
+    uploadedFiles: [],
+    showFileUpload: false,
   })
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
+
+  // Simulate Bryan's initial message on component mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleBryanInitialMessage()
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const handleBryanInitialMessage = () => {
+    const bryanMessage: Message = {
+      id: "bryan-initial",
+      type: "user",
+      content:
+        "Hi, I'm Bryan. I have a serious problem with my former employer. They fired me last month without any valid reason and they still haven't paid my salary for the last two weeks I worked. I think this is illegal but I don't know what to do. Can you help me understand my rights and what documents I need to file a case?",
+    }
+
+    const loadingMessage: Message = {
+      id: "loading-bryan",
+      type: "loading",
+      content: "Analyzing your labor law case and reviewing relevant Philippine employment laws...",
+    }
+
+    setMessages((prev) => [...prev, bryanMessage, loadingMessage])
+    setIsLoading(true)
+
+    // Simulate AI analysis delay
+    setTimeout(() => {
+      const aiResponse: Message = {
+        id: "ai-bryan-response",
+        type: "ai",
+        content: bryanLegalResponse.advice,
+        documents: bryanLegalResponse.documents,
+        lawyers: bryanLegalResponse.lawyers,
+      }
+
+      setMessages((prev) => {
+        const withoutLoading = prev.filter((msg) => msg.id !== "loading-bryan")
+        return [...withoutLoading, aiResponse]
+      })
+      setIsLoading(false)
+    }, 4000)
+  }
 
   // Progress bar animation for document generation
   useEffect(() => {
@@ -129,7 +246,7 @@ export default function ChatPage() {
     if (documentGeneration.isGenerating && documentGeneration.progress < 100) {
       interval = setInterval(() => {
         setDocumentGeneration((prev) => {
-          const newProgress = prev.progress + 5
+          const newProgress = prev.progress + 8
           if (newProgress >= 100) {
             clearInterval(interval)
             return {
@@ -141,7 +258,7 @@ export default function ChatPage() {
           }
           return { ...prev, progress: newProgress }
         })
-      }, 150)
+      }, 200)
     }
 
     return () => clearInterval(interval)
@@ -159,7 +276,7 @@ export default function ChatPage() {
     const loadingMessage: Message = {
       id: (Date.now() + 1).toString(),
       type: "loading",
-      content: "Analyzing your labor law issue...",
+      content: "Analyzing your legal question and researching relevant laws...",
     }
 
     setMessages((prev) => [...prev, userMessage, loadingMessage])
@@ -171,36 +288,75 @@ export default function ChatPage() {
       const aiMessage: Message = {
         id: (Date.now() + 2).toString(),
         type: "ai",
-        content: bryanLegalResponse.advice,
-        documents: bryanLegalResponse.documents,
+        content:
+          "I understand your concern. Based on your additional question, I recommend consulting with one of the labor law specialists I mentioned earlier. They can provide more specific guidance for your unique situation.",
         lawyers: bryanLegalResponse.lawyers,
       }
 
       setMessages((prev) => {
-        // Remove loading message and add AI response
         const withoutLoading = prev.filter((msg) => msg.type !== "loading")
         return [...withoutLoading, aiMessage]
       })
       setIsLoading(false)
-    }, 3000) // 3 second delay
+    }, 3000)
   }
 
   const handleGenerateDocument = (documentType: string) => {
     setDocumentGeneration({
-      isGenerating: true,
+      isOpen: true,
       documentType,
+      isGenerating: false,
       progress: 0,
       isComplete: false,
+      uploadedFiles: [],
+      showFileUpload: true,
     })
+  }
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || [])
+    setDocumentGeneration((prev) => ({
+      ...prev,
+      uploadedFiles: [...prev.uploadedFiles, ...files],
+    }))
+  }
+
+  const removeFile = (index: number) => {
+    setDocumentGeneration((prev) => ({
+      ...prev,
+      uploadedFiles: prev.uploadedFiles.filter((_, i) => i !== index),
+    }))
+  }
+
+  const startDocumentGeneration = () => {
+    setDocumentGeneration((prev) => ({
+      ...prev,
+      isGenerating: true,
+      showFileUpload: false,
+      progress: 0,
+    }))
   }
 
   const closeDocumentDialog = () => {
     setDocumentGeneration({
-      isGenerating: false,
+      isOpen: false,
       documentType: null,
+      isGenerating: false,
       progress: 0,
       isComplete: false,
+      uploadedFiles: [],
+      showFileUpload: false,
     })
+  }
+
+  const downloadDocument = () => {
+    const element = document.createElement("a")
+    const file = new Blob([documentGeneration.documentContent || ""], { type: "text/plain" })
+    element.href = URL.createObjectURL(file)
+    element.download = `${documentGeneration.documentType?.replace(/\s+/g, "_")}_Bryan.txt`
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
   }
 
   return (
@@ -253,22 +409,41 @@ export default function ChatPage() {
                         : "bg-white border shadow-sm"
                   }`}
                 >
-                  <p className={`text-sm ${message.type === "loading" ? "text-gray-500 italic" : ""}`}>
+                  <p
+                    className={`text-sm whitespace-pre-line ${message.type === "loading" ? "text-gray-500 italic" : ""}`}
+                  >
                     {message.content}
                   </p>
 
-                  {/* Required Documents Section */}
+                  {/* Documents Section */}
                   {message.documents && (
-                    <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
-                        <FileText className="w-4 h-4 mr-2" />
-                        Required Documents
-                      </h4>
-                      <div className="space-y-2">
-                        {message.documents.map((doc, index) => (
-                          <div key={index} className="flex items-center justify-between">
-                            <span className="text-sm text-blue-800">{doc}</span>
-                            {bryanLegalResponse.aiGeneratedDocuments.includes(doc) ? (
+                    <div className="mt-4 space-y-4">
+                      {/* Required Documents */}
+                      <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                        <h4 className="font-semibold text-amber-900 mb-2 flex items-center">
+                          <FileText className="w-4 h-4 mr-2" />
+                          Documents You Need to Provide
+                        </h4>
+                        <div className="space-y-1">
+                          {message.documents.required.map((doc, index) => (
+                            <div key={index} className="flex items-center text-sm text-amber-800">
+                              <span className="w-2 h-2 bg-amber-600 rounded-full mr-2 flex-shrink-0"></span>
+                              {doc}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* AI Generated Documents */}
+                      <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+                          <Bot className="w-4 h-4 mr-2" />
+                          Documents AI Can Generate for You
+                        </h4>
+                        <div className="space-y-2">
+                          {message.documents.aiGenerated.map((doc, index) => (
+                            <div key={index} className="flex items-center justify-between">
+                              <span className="text-sm text-blue-800">{doc}</span>
                               <Button
                                 size="sm"
                                 variant="outline"
@@ -278,21 +453,17 @@ export default function ChatPage() {
                                 <Download className="w-3 h-3 mr-1" />
                                 Generate
                               </Button>
-                            ) : (
-                              <Badge variant="outline" className="text-xs">
-                                Manual Preparation
-                              </Badge>
-                            )}
-                          </div>
-                        ))}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}
 
                   {/* Recommended Lawyers Section */}
                   {message.lawyers && (
-                    <div className="mt-4 p-3 bg-green-50 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">Recommended Lawyers</h4>
+                    <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                      <h4 className="font-semibold text-green-900 mb-2">Recommended Labor Law Specialists</h4>
                       <div className="space-y-2">
                         {message.lawyers.map((lawyer) => (
                           <div key={lawyer.id} className="flex items-center justify-between">
@@ -312,7 +483,7 @@ export default function ChatPage() {
                       </div>
                       <Link href="/lawyers">
                         <Button variant="link" className="text-xs text-green-600 p-0 mt-2">
-                          View all lawyers →
+                          View all labor lawyers →
                         </Button>
                       </Link>
                     </div>
@@ -331,7 +502,7 @@ export default function ChatPage() {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Describe your legal problem... (e.g., 'I was fired without notice from my job')"
+                placeholder="Ask follow-up questions about your case..."
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 className="flex-1"
               />
@@ -343,122 +514,152 @@ export default function ChatPage() {
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-xs"
-                onClick={() => setInput("I was fired without notice and my employer hasn't paid my last salary.")}
+                onClick={() => setInput("How long do I have to file a complaint with DOLE?")}
               >
-                Unpaid Salary
+                Filing Deadlines
               </Badge>
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-xs"
-                onClick={() => setInput("My employer terminated me without any valid reason.")}
+                onClick={() => setInput("What compensation can I expect if I win my case?")}
               >
-                Unjust Termination
+                Expected Compensation
               </Badge>
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-xs"
-                onClick={() => setInput("I'm being forced to work overtime without compensation.")}
+                onClick={() => setInput("Can my employer retaliate against me for filing a complaint?")}
               >
-                Unpaid Overtime
-              </Badge>
-              <Badge
-                variant="secondary"
-                className="cursor-pointer text-xs"
-                onClick={() => setInput("I'm experiencing workplace harassment.")}
-              >
-                Workplace Harassment
+                Retaliation Protection
               </Badge>
             </div>
           </CardContent>
         </Card>
-
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-4 mt-6">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Document Templates</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-gray-600 mb-3">Generate common legal documents</p>
-              <Button size="sm" variant="outline" className="w-full">
-                Browse Templates
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Legal Resources</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-gray-600 mb-3">Learn about Philippine labor laws</p>
-              <Button size="sm" variant="outline" className="w-full">
-                View Resources
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Emergency Legal Aid</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-gray-600 mb-3">Urgent labor dispute assistance</p>
-              <Button size="sm" variant="outline" className="w-full">
-                Get Help Now
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
       </div>
 
       {/* Document Generation Dialog */}
-      <Dialog open={documentGeneration.isGenerating} onOpenChange={closeDocumentDialog}>
-        <DialogContent className="sm:max-w-[600px]">
+      <Dialog open={documentGeneration.isOpen} onOpenChange={closeDocumentDialog}>
+        <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {documentGeneration.isComplete
                 ? "Document Generated Successfully"
-                : `Generating ${documentGeneration.documentType}`}
+                : documentGeneration.isGenerating
+                  ? `Generating ${documentGeneration.documentType}`
+                  : `Generate ${documentGeneration.documentType}`}
             </DialogTitle>
             <DialogDescription>
               {documentGeneration.isComplete
-                ? "Your document is ready for download or editing."
-                : "Please wait while we prepare your legal document..."}
+                ? "Your legal document is ready for download and review."
+                : documentGeneration.isGenerating
+                  ? "Please wait while we analyze your case details and generate your legal document..."
+                  : "Upload your supporting documents to help us create a more accurate and personalized legal document."}
             </DialogDescription>
           </DialogHeader>
 
-          {!documentGeneration.isComplete ? (
+          {/* File Upload Section */}
+          {documentGeneration.showFileUpload && (
+            <div className="py-4 space-y-4">
+              <div>
+                <Label htmlFor="file-upload" className="text-sm font-medium">
+                  Upload Supporting Documents (Optional)
+                </Label>
+                <p className="text-xs text-gray-500 mb-3">
+                  Upload employment contract, payslips, termination letter, or other relevant documents
+                </p>
+                <div
+                  className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-400 transition-colors"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-600">Click to upload files or drag and drop</p>
+                  <p className="text-xs text-gray-400">PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</p>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </div>
+
+              {/* Uploaded Files List */}
+              {documentGeneration.uploadedFiles.length > 0 && (
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Uploaded Files:</Label>
+                  {documentGeneration.uploadedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded border">
+                      <div className="flex items-center space-x-2">
+                        <File className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm text-gray-700">{file.name}</span>
+                        <span className="text-xs text-gray-500">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                      </div>
+                      <Button size="sm" variant="ghost" onClick={() => removeFile(index)} className="h-6 w-6 p-0">
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Generation Progress */}
+          {documentGeneration.isGenerating && !documentGeneration.isComplete && (
             <div className="py-6">
               <div className="flex items-center justify-center mb-4">
                 <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div className="w-full bg-gray-200 rounded-full h-3">
                 <div
-                  className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                  className="bg-blue-600 h-3 rounded-full transition-all duration-300"
                   style={{ width: `${documentGeneration.progress}%` }}
                 ></div>
               </div>
               <div className="flex justify-between mt-2 text-sm text-gray-500">
-                <span>Analyzing case details</span>
+                <span>
+                  {documentGeneration.progress < 30
+                    ? "Analyzing uploaded documents..."
+                    : documentGeneration.progress < 60
+                      ? "Applying Philippine labor laws..."
+                      : documentGeneration.progress < 90
+                        ? "Customizing document for your case..."
+                        : "Finalizing document..."}
+                </span>
                 <span>{documentGeneration.progress}%</span>
               </div>
             </div>
-          ) : (
+          )}
+
+          {/* Generated Document Display */}
+          {documentGeneration.isComplete && (
             <div className="py-4">
-              <div className="bg-gray-50 p-4 rounded-md border max-h-[400px] overflow-y-auto font-mono text-sm whitespace-pre-wrap">
+              <div className="bg-gray-50 p-4 rounded-md border max-h-[400px] overflow-y-auto font-mono text-xs whitespace-pre-wrap">
                 {documentGeneration.documentContent}
               </div>
             </div>
           )}
 
           <DialogFooter>
+            {documentGeneration.showFileUpload && (
+              <>
+                <Button variant="outline" onClick={closeDocumentDialog}>
+                  Cancel
+                </Button>
+                <Button onClick={startDocumentGeneration}>
+                  <FileText className="w-4 h-4 mr-2" />
+                  Generate Document
+                </Button>
+              </>
+            )}
             {documentGeneration.isComplete && (
               <>
                 <Button variant="outline" onClick={closeDocumentDialog}>
                   Close
                 </Button>
-                <Button>
+                <Button onClick={downloadDocument}>
                   <Download className="w-4 h-4 mr-2" />
                   Download Document
                 </Button>
