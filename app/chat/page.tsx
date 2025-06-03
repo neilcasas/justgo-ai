@@ -591,7 +591,7 @@ export default function ChatPage() {
                   )
                 }
               >
-                Startnig a Business
+                Starting a Business
               </Badge>
               <Badge
                 variant="secondary"
