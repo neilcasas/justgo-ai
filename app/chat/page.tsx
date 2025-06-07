@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useRef, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 import {
   Send,
   FileText,
@@ -22,8 +22,8 @@ import {
   MessageSquare,
   Plus,
   Trash2,
-} from "lucide-react"
-import Link from "next/link"
+} from "lucide-react";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -31,41 +31,41 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog"
-import Image from "next/image"
+} from "@/components/ui/dialog";
+import Image from "next/image";
 
 interface Message {
-  id: string
-  type: "user" | "ai" | "loading"
-  content: string
+  id: string;
+  type: "user" | "ai" | "loading";
+  content: string;
   documents?: {
-    required: string[]
-    aiGenerated: string[]
-  }
+    required: string[];
+    aiGenerated: string[];
+  };
   lawyers?: Array<{
-    id: string
-    name: string
-    specialization: string
-    rating: number
-  }>
+    id: string;
+    name: string;
+    specialization: string;
+    rating: number;
+  }>;
 }
 
 interface DocumentGenerationState {
-  isOpen: boolean
-  documentType: string | null
-  isGenerating: boolean
-  progress: number
-  isComplete: boolean
-  documentContent?: string
-  uploadedFiles: File[]
-  showFileUpload: boolean
+  isOpen: boolean;
+  documentType: string | null;
+  isGenerating: boolean;
+  progress: number;
+  isComplete: boolean;
+  documentContent?: string;
+  uploadedFiles: File[];
+  showFileUpload: boolean;
 }
 
 interface ChatHistory {
-  id: string
-  title: string
-  date: string
-  preview: string
+  id: string;
+  title: string;
+  date: string;
+  preview: string;
 }
 
 // Mock chat history data
@@ -74,7 +74,8 @@ const mockChatHistory: ChatHistory[] = [
     id: "1",
     title: "Unpaid Salary & Illegal Dismissal",
     date: "Today",
-    preview: "I was fired without notice and my employer hasn't paid my last salary...",
+    preview:
+      "I was fired without notice and my employer hasn't paid my last salary...",
   },
   {
     id: "2",
@@ -92,7 +93,8 @@ const mockChatHistory: ChatHistory[] = [
     id: "4",
     title: "Workplace Harassment Case",
     date: "1 week ago",
-    preview: "I'm experiencing harassment from my supervisor and need legal advice...",
+    preview:
+      "I'm experiencing harassment from my supervisor and need legal advice...",
   },
   {
     id: "5",
@@ -102,11 +104,26 @@ const mockChatHistory: ChatHistory[] = [
   },
   {
     id: "6",
-    title: "13th Month Pay Inquiry",
+    title: "Starting a Business in the Philippines",
     date: "2 weeks ago",
-    preview: "When should I receive my 13th month pay and how is it calculated...",
+    preview:
+      "What are the legal requirements for starting a business in the Philipp...",
   },
-]
+  {
+    id: "7",
+    title: "Insurance Claim Denial",
+    date: "3 weeks ago",
+    preview:
+      "My health insurance claim was denied and I need to appeal the decision...",
+  },
+  {
+    id: "8",
+    title: "Animal Abuse Laws",
+    date: "1 month ago",
+    preview:
+      "What laws pertain to animal abuse in the Philippines and how can I report...",
+  },
+];
 
 // Bryan's specific legal response
 const bryanLegalResponse = {
@@ -114,16 +131,16 @@ const bryanLegalResponse = {
 
 <div class="space-y-4">
   <div>
-    <h3 class="font-bold text-gray-900 mb-2">LEGAL ANALYSIS:</h3>
+    <h2 class="font-bold text-gray-900 text-xl my-4">LEGAL ANALYSIS:</h2>
     <ol class="list-decimal pl-5 space-y-3">
       <li>
-        <span class="font-medium">Unpaid Salary Violation:</span> Under <a href="https://blr.dole.gov.ph/2014/12/11/book-three-conditions-of-employment/" target="_blank" class="text-blue-600 hover:underline">Article 103 of the Labor Code of the Philippines</a> (Presidential Decree No. 442), wages must be paid at least once every two weeks or twice a month. Your employer's failure to pay your salary constitutes a violation of this provision.
+        <span class="font-medium">Unpaid Salary Violation:</span> Under <a href="https://lawphil.net/statutes/presdecs/pd1974/pd_442_1974.html" target="_blank" class="text-blue-600 hover:underline">Article 103 of the Labor Code of the Philippines</a> (Presidential Decree No. 442), wages must be paid at least once every two weeks or twice a month. Your employer's failure to pay your salary constitutes a violation of this provision.
       </li>
       <li>
-        <span class="font-medium">Unjust Termination:</span> <a href="https://blr.dole.gov.ph/2014/12/11/book-six-post-employment/" target="_blank" class="text-blue-600 hover:underline">Article 294 (formerly Article 279)</a> of the Labor Code provides security of tenure to employees. Termination without just or authorized cause and without due process constitutes illegal dismissal.
+        <span class="font-medium">Unjust Termination:</span> <a href="https://lawphil.net/statutes/presdecs/pd1974/pd_442_1974.html" target="_blank" class="text-blue-600 hover:underline">Article 294 (formerly Article 279)</a> of the Labor Code provides security of tenure to employees. Termination without just or authorized cause and without due process constitutes illegal dismissal.
       </li>
       <li>
-        <span class="font-medium">Due Process Requirements:</span> <a href="https://blr.dole.gov.ph/2014/12/11/book-six-post-employment/" target="_blank" class="text-blue-600 hover:underline">Article 292</a> requires employers to follow procedural due process - written notice specifying grounds for termination and opportunity to be heard.
+        <span class="font-medium">Due Process Requirements:</span> <a href="https://lawphil.net/statutes/presdecs/pd1974/pd_442_1974.html" target="_blank" class="text-blue-600 hover:underline">Article 292</a> requires employers to follow procedural due process - written notice specifying grounds for termination and opportunity to be heard.
       </li>
     </ol>
   </div>
@@ -132,7 +149,7 @@ const bryanLegalResponse = {
     <h3 class="font-bold text-gray-900 mb-2">YOUR LEGAL REMEDIES:</h3>
     <ul class="list-disc pl-5 space-y-1">
       <li>File a complaint with <a href="https://www.dole.gov.ph/sena/" target="_blank" class="text-blue-600 hover:underline">DOLE</a> for unpaid wages (money claims)</li>
-      <li>File an illegal dismissal case with <a href="https://nlrc.dole.gov.ph/" target="_blank" class="text-blue-600 hover:underline">NLRC</a></li>
+      <li>File an illegal dismissal case with <a href="https://nlrc.dole.gov.ph/Node/view/TlYwMDA0MQ" target="_blank" class="text-blue-600 hover:underline">NLRC</a></li>
       <li>Seek reinstatement with full backwages</li>
       <li>Claim moral and exemplary damages</li>
     </ul>
@@ -142,7 +159,7 @@ const bryanLegalResponse = {
     <h3 class="font-bold text-gray-900 mb-2">JURISDICTION:</h3>
     <ul class="list-disc pl-5 space-y-1">
       <li><a href="https://www.dole.gov.ph/" target="_blank" class="text-blue-600 hover:underline">DOLE</a>: Money claims up to ₱5,000 per employee</li>
-      <li><a href="https://nlrc.dole.gov.ph/" target="_blank" class="text-blue-600 hover:underline">NLRC</a>: Illegal dismissal cases and higher money claims</li>
+      <li><a href="https://nlrc.dole.gov.ph/Node/view/TlYwMDA0MQ" target="_blank" class="text-blue-600 hover:underline">NLRC</a>: Illegal dismissal cases and higher money claims</li>
     </ul>
   </div>
 </div>
@@ -260,7 +277,7 @@ Date: _______________
 
 ---
 Note: This demand letter was generated by JustGo PH based on the uploaded documents and case details provided. Please review and customize as needed before sending.`,
-}
+};
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
@@ -270,96 +287,99 @@ export default function ChatPage() {
       content:
         "Hello! I'm your AI legal assistant specializing in Philippine labor law. I can help you understand your rights, generate legal documents, and connect you with qualified lawyers. What specific workplace issue can I help you with today?",
     },
-  ])
-  const [input, setInput] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [documentGeneration, setDocumentGeneration] = useState<DocumentGenerationState>({
-    isOpen: false,
-    documentType: null,
-    isGenerating: false,
-    progress: 0,
-    isComplete: false,
-    uploadedFiles: [],
-    showFileUpload: false,
-  })
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [documentGeneration, setDocumentGeneration] =
+    useState<DocumentGenerationState>({
+      isOpen: false,
+      documentType: null,
+      isGenerating: false,
+      progress: 0,
+      isComplete: false,
+      uploadedFiles: [],
+      showFileUpload: false,
+    });
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [chatFiles, setChatFiles] = useState<File[]>([])
-  const chatFileInputRef = useRef<HTMLInputElement>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [chatHistory, setChatHistory] = useState<ChatHistory[]>(mockChatHistory)
+  const [chatFiles, setChatFiles] = useState<File[]>([]);
+  const chatFileInputRef = useRef<HTMLInputElement>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [chatHistory, setChatHistory] =
+    useState<ChatHistory[]>(mockChatHistory);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   // Progress bar animation for document generation
   useEffect(() => {
-    let interval: NodeJS.Timeout
+    let interval: NodeJS.Timeout;
 
     if (documentGeneration.isGenerating && documentGeneration.progress < 100) {
       interval = setInterval(() => {
         setDocumentGeneration((prev) => {
-          const newProgress = prev.progress + 8
+          const newProgress = prev.progress + 8;
           if (newProgress >= 100) {
-            clearInterval(interval)
+            clearInterval(interval);
             return {
               ...prev,
               progress: 100,
               isComplete: true,
               documentContent: bryanLegalResponse.demandLetterContent,
-            }
+            };
           }
-          return { ...prev, progress: newProgress }
-        })
-      }, 200)
+          return { ...prev, progress: newProgress };
+        });
+      }, 200);
     }
 
-    return () => clearInterval(interval)
-  }, [documentGeneration.isGenerating, documentGeneration.progress])
+    return () => clearInterval(interval);
+  }, [documentGeneration.isGenerating, documentGeneration.progress]);
 
   const handleChatFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || [])
-    setChatFiles((prev) => [...prev, ...files])
-  }
+    const files = Array.from(event.target.files || []);
+    setChatFiles((prev) => [...prev, ...files]);
+  };
 
   const removeChatFile = (index: number) => {
-    setChatFiles((prev) => prev.filter((_, i) => i !== index))
-  }
+    setChatFiles((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const handleSend = () => {
-    if (!input.trim() || isLoading) return
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: "user",
       content: input,
-    }
+    };
 
     const loadingMessage: Message = {
       id: (Date.now() + 1).toString(),
       type: "loading",
       content: "Analyzing your case and reviewing relevant Philippine laws...",
-    }
+    };
 
-    setMessages((prev) => [...prev, userMessage, loadingMessage])
-    setInput("")
-    setChatFiles([]) // Clear uploaded files after sending
-    setIsLoading(true)
+    setMessages((prev) => [...prev, userMessage, loadingMessage]);
+    setInput("");
+    setChatFiles([]); // Clear uploaded files after sending
+    setIsLoading(true);
 
     // Check if this is Bryan's specific case about unpaid salary and unjust termination
     const isBryanCase =
       input.toLowerCase().includes("unpaid") &&
-      (input.toLowerCase().includes("salary") || input.toLowerCase().includes("wage")) &&
+      (input.toLowerCase().includes("salary") ||
+        input.toLowerCase().includes("wage")) &&
       (input.toLowerCase().includes("fired") ||
         input.toLowerCase().includes("terminated") ||
-        input.toLowerCase().includes("dismissal"))
+        input.toLowerCase().includes("dismissal"));
 
     // Simulate AI analysis delay
     setTimeout(() => {
-      let aiResponse: Message
+      let aiResponse: Message;
 
       if (isBryanCase) {
         // Bryan's specific case response
@@ -369,7 +389,7 @@ export default function ChatPage() {
           content: bryanLegalResponse.advice,
           documents: bryanLegalResponse.documents,
           lawyers: bryanLegalResponse.lawyers,
-        }
+        };
       } else {
         // Generic response for other queries
         aiResponse = {
@@ -378,16 +398,16 @@ export default function ChatPage() {
           content:
             "I understand your concern. Based on your question, I recommend consulting with one of our qualified labor law specialists who can provide more specific guidance for your unique situation. Could you provide more details about your specific workplace issue so I can give you more targeted advice?",
           lawyers: bryanLegalResponse.lawyers,
-        }
+        };
       }
 
       setMessages((prev) => {
-        const withoutLoading = prev.filter((msg) => msg.type !== "loading")
-        return [...withoutLoading, aiResponse]
-      })
-      setIsLoading(false)
-    }, 4000)
-  }
+        const withoutLoading = prev.filter((msg) => msg.type !== "loading");
+        return [...withoutLoading, aiResponse];
+      });
+      setIsLoading(false);
+    }, 4000);
+  };
 
   const handleGenerateDocument = (documentType: string) => {
     setDocumentGeneration({
@@ -398,23 +418,23 @@ export default function ChatPage() {
       isComplete: false,
       uploadedFiles: [],
       showFileUpload: true,
-    })
-  }
+    });
+  };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || [])
+    const files = Array.from(event.target.files || []);
     setDocumentGeneration((prev) => ({
       ...prev,
       uploadedFiles: [...prev.uploadedFiles, ...files],
-    }))
-  }
+    }));
+  };
 
   const removeFile = (index: number) => {
     setDocumentGeneration((prev) => ({
       ...prev,
       uploadedFiles: prev.uploadedFiles.filter((_, i) => i !== index),
-    }))
-  }
+    }));
+  };
 
   const startDocumentGeneration = () => {
     setDocumentGeneration((prev) => ({
@@ -422,8 +442,8 @@ export default function ChatPage() {
       isGenerating: true,
       showFileUpload: false,
       progress: 0,
-    }))
-  }
+    }));
+  };
 
   const closeDocumentDialog = () => {
     setDocumentGeneration({
@@ -434,20 +454,23 @@ export default function ChatPage() {
       isComplete: false,
       uploadedFiles: [],
       showFileUpload: false,
-    })
-  }
+    });
+  };
 
   const downloadDocument = () => {
-    const element = document.createElement("a")
+    const element = document.createElement("a");
     const file = new Blob([documentGeneration.documentContent || ""], {
       type: "text/plain",
-    })
-    element.href = URL.createObjectURL(file)
-    element.download = `${documentGeneration.documentType?.replace(/\s+/g, "_")}_Bryan.txt`
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
-  }
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `${documentGeneration.documentType?.replace(
+      /\s+/g,
+      "_"
+    )}_Bryan.txt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   const startNewChat = () => {
     setMessages([
@@ -457,11 +480,11 @@ export default function ChatPage() {
         content:
           "Hello! I'm your AI legal assistant specializing in Philippine labor law. I can help you understand your rights, generate legal documents, and connect you with qualified lawyers. What specific workplace issue can I help you with today?",
       },
-    ])
-    setInput("")
-    setChatFiles([])
-    setSidebarOpen(false)
-  }
+    ]);
+    setInput("");
+    setChatFiles([]);
+    setSidebarOpen(false);
+  };
 
   const loadChatHistory = (historyItem: ChatHistory) => {
     // In a real app, this would load the actual conversation
@@ -478,25 +501,31 @@ export default function ChatPage() {
         content:
           "This is a previous conversation. The full chat history would be loaded here in a real implementation.",
       },
-    ])
-    setSidebarOpen(false)
-  }
+    ]);
+    setSidebarOpen(false);
+  };
 
   const deleteChatHistory = (historyId: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    setChatHistory((prev) => prev.filter((item) => item.id !== historyId))
-  }
+    e.stopPropagation();
+    setChatHistory((prev) => prev.filter((item) => item.id !== historyId));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <div
-        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 fixed lg:relative z-30 w-64 bg-white border-r border-gray-200 h-full transition-transform duration-300 ease-in-out`}
+        className={`${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 fixed lg:relative z-30 w-64 bg-white border-r border-gray-200 h-full transition-transform duration-300 ease-in-out`}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}
           <div className="p-4 border-b border-gray-200">
-            <Button onClick={startNewChat} className="w-full justify-start" variant="outline">
+            <Button
+              onClick={startNewChat}
+              className="w-full justify-start"
+              variant="outline"
+            >
               <Plus className="w-4 h-4 mr-2" />
               New Chat
             </Button>
@@ -514,9 +543,13 @@ export default function ChatPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center mb-1">
                       <MessageSquare className="w-3 h-3 text-gray-400 mr-2 flex-shrink-0" />
-                      <h4 className="text-sm font-medium text-gray-900 truncate">{item.title}</h4>
+                      <h4 className="text-sm font-medium text-gray-900 truncate">
+                        {item.title}
+                      </h4>
                     </div>
-                    <p className="text-xs text-gray-500 truncate">{item.preview}</p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {item.preview}
+                    </p>
                     <p className="text-xs text-gray-400 mt-1">{item.date}</p>
                   </div>
                   <Button
@@ -539,7 +572,9 @@ export default function ChatPage() {
                 <User className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900">Bryan Mazino</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Bryan Mazino
+                </p>
                 <p className="text-xs text-gray-500">Free Plan</p>
               </div>
             </div>
@@ -549,7 +584,10 @@ export default function ChatPage() {
 
       {/* Sidebar Overlay for mobile */}
       {sidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden" onClick={() => setSidebarOpen(false)} />
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
       )}
 
       {/* Main Content */}
@@ -568,7 +606,12 @@ export default function ChatPage() {
                   <Menu className="w-4 h-4" />
                 </Button>
                 <Link href="/" className="flex items-center">
-                  <Image src="/logo.png" alt="JustGo Logo" width={150} height={60} />
+                  <Image
+                    src="/logo.png"
+                    alt="JustGo Logo"
+                    width={150}
+                    height={60}
+                  />
                 </Link>
               </div>
               <div className="flex items-center space-x-4">
@@ -585,10 +628,17 @@ export default function ChatPage() {
           {/* Chat Messages */}
           <div className="space-y-4 mb-6 max-h-[calc(100vh-250px)] overflow-y-auto">
             {messages.map((message) => (
-              <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                key={message.id}
+                className={`flex ${
+                  message.type === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
                 <div
                   className={`flex items-start space-x-3 max-w-3xl ${
-                    message.type === "user" ? "flex-row-reverse space-x-reverse" : ""
+                    message.type === "user"
+                      ? "flex-row-reverse space-x-reverse"
+                      : ""
                   }`}
                 >
                   <div
@@ -609,14 +659,19 @@ export default function ChatPage() {
                       message.type === "user"
                         ? "bg-blue-600 text-white"
                         : message.type === "loading"
-                          ? "bg-gray-100 border shadow-sm animate-pulse"
-                          : "bg-white border shadow-sm"
+                        ? "bg-gray-100 border shadow-sm animate-pulse"
+                        : "bg-white border shadow-sm"
                     }`}
                   >
                     {message.type === "loading" ? (
-                      <p className="text-sm whitespace-pre-line text-gray-500 italic">{message.content}</p>
+                      <p className="text-sm whitespace-pre-line text-gray-500 italic">
+                        {message.content}
+                      </p>
                     ) : (
-                      <div className="text-sm" dangerouslySetInnerHTML={{ __html: message.content }} />
+                      <div
+                        className="text-sm"
+                        dangerouslySetInnerHTML={{ __html: message.content }}
+                      />
                     )}
 
                     {/* Documents Section */}
@@ -630,7 +685,10 @@ export default function ChatPage() {
                           </h4>
                           <div className="space-y-1">
                             {message.documents.required.map((doc, index) => (
-                              <div key={index} className="flex items-center text-sm text-amber-800">
+                              <div
+                                key={index}
+                                className="flex items-center text-sm text-amber-800"
+                              >
                                 <span className="w-2 h-2 bg-amber-600 rounded-full mr-2 flex-shrink-0"></span>
                                 {doc}
                               </div>
@@ -646,8 +704,13 @@ export default function ChatPage() {
                           </h4>
                           <div className="space-y-2">
                             {message.documents.aiGenerated.map((doc, index) => (
-                              <div key={index} className="flex items-center justify-between">
-                                <span className="text-sm text-blue-800">{doc}</span>
+                              <div
+                                key={index}
+                                className="flex items-center justify-between"
+                              >
+                                <span className="text-sm text-blue-800">
+                                  {doc}
+                                </span>
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -667,18 +730,29 @@ export default function ChatPage() {
                     {/* Recommended Lawyers Section */}
                     {message.lawyers && (
                       <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
-                        <h4 className="font-semibold text-green-900 mb-2">Recommended Labor Law Specialists</h4>
+                        <h4 className="font-semibold text-green-900 mb-2">
+                          Recommended Labor Law Specialists
+                        </h4>
                         <div className="space-y-2">
                           {message.lawyers.map((lawyer) => (
-                            <div key={lawyer.id} className="flex items-center justify-between">
+                            <div
+                              key={lawyer.id}
+                              className="flex items-center justify-between"
+                            >
                               <div>
-                                <div className="text-sm font-medium text-green-800">{lawyer.name}</div>
+                                <div className="text-sm font-medium text-green-800">
+                                  {lawyer.name}
+                                </div>
                                 <div className="text-xs text-green-600">
                                   {lawyer.specialization} • ⭐ {lawyer.rating}
                                 </div>
                               </div>
                               <Link href={`/lawyers/${lawyer.id}`}>
-                                <Button size="sm" variant="outline" className="text-xs">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-xs"
+                                >
                                   View Profile
                                 </Button>
                               </Link>
@@ -686,7 +760,10 @@ export default function ChatPage() {
                           ))}
                         </div>
                         <Link href="/lawyers">
-                          <Button variant="link" className="text-xs text-green-600 p-0 mt-2">
+                          <Button
+                            variant="link"
+                            className="text-xs text-green-600 p-0 mt-2"
+                          >
                             View all labor lawyers →
                           </Button>
                         </Link>
@@ -697,10 +774,12 @@ export default function ChatPage() {
                     {message.type === "ai" && (
                       <div className="mt-4 p-3 bg-red-50 rounded-lg border border-red-200">
                         <p className="text-xs text-red-700">
-                          <strong>⚠️ Legal Disclaimer:</strong> JustGo AI is not a replacement for professional legal
-                          advice. This information is for educational purposes only and should not be considered as
-                          legal counsel. Please consult with a qualified attorney before making any legal decisions or
-                          taking action based on this advice.
+                          <strong>⚠️ Legal Disclaimer:</strong> JustGo AI is not
+                          a replacement for professional legal advice. This
+                          information is for educational purposes only and
+                          should not be considered as legal counsel. Please
+                          consult with a qualified attorney before making any
+                          legal decisions or taking action based on this advice.
                         </p>
                       </div>
                     )}
@@ -720,9 +799,14 @@ export default function ChatPage() {
                   <Label className="text-sm font-medium">Attached Files:</Label>
                   <div className="flex flex-wrap gap-2">
                     {chatFiles.map((file, index) => (
-                      <div key={index} className="flex items-center space-x-2 bg-gray-100 rounded-md px-2 py-1 text-xs">
+                      <div
+                        key={index}
+                        className="flex items-center space-x-2 bg-gray-100 rounded-md px-2 py-1 text-xs"
+                      >
                         <File className="h-3 w-3 text-gray-500" />
-                        <span className="text-gray-700 max-w-[100px] truncate">{file.name}</span>
+                        <span className="text-gray-700 max-w-[100px] truncate">
+                          {file.name}
+                        </span>
                         <Button
                           size="sm"
                           variant="ghost"
@@ -776,7 +860,7 @@ export default function ChatPage() {
                   className="cursor-pointer text-xs"
                   onClick={() =>
                     setInput(
-                      "I was fired without notice and my employer hasn't paid my last salary. What are my rights?",
+                      "I was fired without notice and my employer hasn't paid my last salary. What are my rights?"
                     )
                   }
                 >
@@ -785,7 +869,11 @@ export default function ChatPage() {
                 <Badge
                   variant="secondary"
                   className="cursor-pointer text-xs"
-                  onClick={() => setInput("My employer terminated me without any valid reason and due process.")}
+                  onClick={() =>
+                    setInput(
+                      "My employer terminated me without any valid reason and due process."
+                    )
+                  }
                 >
                   Illegal Dismissal
                 </Badge>
@@ -793,7 +881,9 @@ export default function ChatPage() {
                   variant="secondary"
                   className="cursor-pointer text-xs"
                   onClick={() =>
-                    setInput("What are the legal requirements for starting a business in the Philippines?")
+                    setInput(
+                      "What are the legal requirements for starting a business in the Philippines?"
+                    )
                   }
                 >
                   Starting a Business
@@ -801,7 +891,11 @@ export default function ChatPage() {
                 <Badge
                   variant="secondary"
                   className="cursor-pointer text-xs"
-                  onClick={() => setInput("What laws pertain to animal abuse in the Philippines?")}
+                  onClick={() =>
+                    setInput(
+                      "What laws pertain to animal abuse in the Philippines?"
+                    )
+                  }
                 >
                   Animal Abuse
                 </Badge>
@@ -812,22 +906,25 @@ export default function ChatPage() {
       </div>
 
       {/* Document Generation Dialog */}
-      <Dialog open={documentGeneration.isOpen} onOpenChange={closeDocumentDialog}>
+      <Dialog
+        open={documentGeneration.isOpen}
+        onOpenChange={closeDocumentDialog}
+      >
         <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {documentGeneration.isComplete
                 ? "Document Generated Successfully"
                 : documentGeneration.isGenerating
-                  ? `Generating ${documentGeneration.documentType}`
-                  : `Generate ${documentGeneration.documentType}`}
+                ? `Generating ${documentGeneration.documentType}`
+                : `Generate ${documentGeneration.documentType}`}
             </DialogTitle>
             <DialogDescription>
               {documentGeneration.isComplete
                 ? "Your legal document is ready for download and review."
                 : documentGeneration.isGenerating
-                  ? "Please wait while we analyze your case details and generate your legal document..."
-                  : "Upload your supporting documents to help us create a more accurate and personalized legal document."}
+                ? "Please wait while we analyze your case details and generate your legal document..."
+                : "Upload your supporting documents to help us create a more accurate and personalized legal document."}
             </DialogDescription>
           </DialogHeader>
 
@@ -839,15 +936,20 @@ export default function ChatPage() {
                   Upload Supporting Documents (Optional)
                 </Label>
                 <p className="text-xs text-gray-500 mb-3">
-                  Upload employment contract, payslips, termination letter, or other relevant documents
+                  Upload employment contract, payslips, termination letter, or
+                  other relevant documents
                 </p>
                 <div
                   className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-400 transition-colors"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-600">Click to upload files or drag and drop</p>
-                  <p className="text-xs text-gray-400">PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</p>
+                  <p className="text-sm text-gray-600">
+                    Click to upload files or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    PDF, DOC, DOCX, JPG, PNG (Max 10MB each)
+                  </p>
                 </div>
                 <input
                   ref={fileInputRef}
@@ -864,13 +966,25 @@ export default function ChatPage() {
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Uploaded Files:</Label>
                   {documentGeneration.uploadedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded border">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-2 bg-gray-50 rounded border"
+                    >
                       <div className="flex items-center space-x-2">
                         <File className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm text-gray-700">{file.name}</span>
-                        <span className="text-xs text-gray-500">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                        <span className="text-sm text-gray-700">
+                          {file.name}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                        </span>
                       </div>
-                      <Button size="sm" variant="ghost" onClick={() => removeFile(index)} className="h-6 w-6 p-0">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => removeFile(index)}
+                        className="h-6 w-6 p-0"
+                      >
                         <X className="h-3 w-3" />
                       </Button>
                     </div>
@@ -881,31 +995,32 @@ export default function ChatPage() {
           )}
 
           {/* Generation Progress */}
-          {documentGeneration.isGenerating && !documentGeneration.isComplete && (
-            <div className="py-6">
-              <div className="flex items-center justify-center mb-4">
-                <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div
-                  className="bg-blue-600 h-3 rounded-full transition-all duration-300"
-                  style={{ width: `${documentGeneration.progress}%` }}
-                ></div>
-              </div>
-              <div className="flex justify-between mt-2 text-sm text-gray-500">
-                <span>
-                  {documentGeneration.progress < 30
-                    ? "Analyzing uploaded documents..."
-                    : documentGeneration.progress < 60
+          {documentGeneration.isGenerating &&
+            !documentGeneration.isComplete && (
+              <div className="py-6">
+                <div className="flex items-center justify-center mb-4">
+                  <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div
+                    className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+                    style={{ width: `${documentGeneration.progress}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-between mt-2 text-sm text-gray-500">
+                  <span>
+                    {documentGeneration.progress < 30
+                      ? "Analyzing uploaded documents..."
+                      : documentGeneration.progress < 60
                       ? "Applying Philippine labor laws..."
                       : documentGeneration.progress < 90
-                        ? "Customizing document for your case..."
-                        : "Finalizing document..."}
-                </span>
-                <span>{documentGeneration.progress}%</span>
+                      ? "Customizing document for your case..."
+                      : "Finalizing document..."}
+                  </span>
+                  <span>{documentGeneration.progress}%</span>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Generated Document Display */}
           {documentGeneration.isComplete && (
@@ -943,5 +1058,5 @@ export default function ChatPage() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
