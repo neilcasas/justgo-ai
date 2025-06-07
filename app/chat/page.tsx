@@ -106,18 +106,6 @@ const mockChatHistory: ChatHistory[] = [
     date: "2 weeks ago",
     preview: "When should I receive my 13th month pay and how is it calculated...",
   },
-  {
-    id: "7",
-    title: "Maternity Leave Rights",
-    date: "3 weeks ago",
-    preview: "What are my rights regarding maternity leave in the Philippines...",
-  },
-  {
-    id: "8",
-    title: "Company Policy Violation",
-    date: "1 month ago",
-    preview: "My employer is implementing policies that seem to violate labor laws...",
-  },
 ]
 
 // Bryan's specific legal response
