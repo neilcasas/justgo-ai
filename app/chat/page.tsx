@@ -697,7 +697,7 @@ export default function ChatPage() {
           </div>
 
           {/* Input Area */}
-          <Card className="absolute bottom-0 left-0 right-0 max-w-4xl mx-auto mb-4">
+          <Card className="absolute bottom-0 left-0 lg:left-64 right-0 max-w-4xl mx-auto mb-4">
             <CardContent className="p-4">
               {/* Uploaded Files Display */}
               {chatFiles.length > 0 && (
