@@ -206,6 +206,9 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const [chatFiles, setChatFiles] = useState<File[]>([])
+  const chatFileInputRef = useRef<HTMLInputElement>(null)
+
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -236,6 +239,15 @@ export default function ChatPage() {
     return () => clearInterval(interval)
   }, [documentGeneration.isGenerating, documentGeneration.progress])
 
+  const handleChatFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || [])
+    setChatFiles((prev) => [...prev, ...files])
+  }
+
+  const removeChatFile = (index: number) => {
+    setChatFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
   const handleSend = () => {
     if (!input.trim() || isLoading) return
 
@@ -253,6 +265,7 @@ export default function ChatPage() {
 
     setMessages((prev) => [...prev, userMessage, loadingMessage])
     setInput("")
+    setChatFiles([]) // Clear uploaded files after sending
     setIsLoading(true)
 
     // Check if this is Bryan's specific case about unpaid salary and unjust termination
@@ -509,18 +522,57 @@ export default function ChatPage() {
         {/* Input Area */}
         <Card className="absolute bottom-0 left-0 right-0 max-w-4xl mx-auto mb-4">
           <CardContent className="p-4">
+            {/* Uploaded Files Display */}
+            {chatFiles.length > 0 && (
+              <div className="mb-3 space-y-2">
+                <Label className="text-sm font-medium">Attached Files:</Label>
+                <div className="flex flex-wrap gap-2">
+                  {chatFiles.map((file, index) => (
+                    <div key={index} className="flex items-center space-x-2 bg-gray-100 rounded-md px-2 py-1 text-xs">
+                      <File className="h-3 w-3 text-gray-500" />
+                      <span className="text-gray-700 max-w-[100px] truncate">{file.name}</span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => removeChatFile(index)}
+                        className="h-4 w-4 p-0 hover:bg-gray-200"
+                      >
+                        <X className="h-2 w-2" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="flex space-x-2">
-              <Input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Describe your legal problem... (e.g., 'I was fired without notice and my employer hasn't paid my salary')"
-                onKeyPress={(e) => e.key === "Enter" && handleSend()}
-                className="flex-1"
-              />
+              <div className="flex-1 flex space-x-2">
+                <Button variant="outline" size="sm" onClick={() => chatFileInputRef.current?.click()} className="px-3">
+                  <Upload className="w-4 h-4" />
+                </Button>
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Describe your legal problem... (e.g., 'I was fired without notice and my employer hasn't paid my salary')"
+                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                  className="flex-1"
+                />
+              </div>
               <Button onClick={handleSend} disabled={isLoading}>
                 <Send className="w-4 h-4" />
               </Button>
             </div>
+
+            {/* Hidden file input */}
+            <input
+              ref={chatFileInputRef}
+              type="file"
+              multiple
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.txt"
+              onChange={handleChatFileUpload}
+              className="hidden"
+            />
+
             <div className="flex flex-wrap gap-2 mt-3">
               <Badge
                 variant="secondary"
