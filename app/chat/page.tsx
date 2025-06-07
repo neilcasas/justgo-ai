@@ -112,25 +112,42 @@ const mockChatHistory: ChatHistory[] = [
 const bryanLegalResponse = {
   advice: `Hello Bryan, I've analyzed your situation regarding unpaid salary and unjust termination. Based on Philippine labor laws, here's my assessment:
 
-LEGAL ANALYSIS:
+<div class="space-y-4">
+  <div>
+    <h3 class="font-bold text-gray-900 mb-2">LEGAL ANALYSIS:</h3>
+    <ol class="list-decimal pl-5 space-y-3">
+      <li>
+        <span class="font-medium">Unpaid Salary Violation:</span> Under <a href="https://blr.dole.gov.ph/2014/12/11/book-three-conditions-of-employment/" target="_blank" class="text-blue-600 hover:underline">Article 103 of the Labor Code of the Philippines</a> (Presidential Decree No. 442), wages must be paid at least once every two weeks or twice a month. Your employer's failure to pay your salary constitutes a violation of this provision.
+      </li>
+      <li>
+        <span class="font-medium">Unjust Termination:</span> <a href="https://blr.dole.gov.ph/2014/12/11/book-six-post-employment/" target="_blank" class="text-blue-600 hover:underline">Article 294 (formerly Article 279)</a> of the Labor Code provides security of tenure to employees. Termination without just or authorized cause and without due process constitutes illegal dismissal.
+      </li>
+      <li>
+        <span class="font-medium">Due Process Requirements:</span> <a href="https://blr.dole.gov.ph/2014/12/11/book-six-post-employment/" target="_blank" class="text-blue-600 hover:underline">Article 292</a> requires employers to follow procedural due process - written notice specifying grounds for termination and opportunity to be heard.
+      </li>
+    </ol>
+  </div>
 
-1. Unpaid Salary Violation: Under Article 103 of the Labor Code of the Philippines (Presidential Decree No. 442), wages must be paid at least once every two weeks or twice a month. Your employer's failure to pay your salary constitutes a violation of this provision.
+  <div>
+    <h3 class="font-bold text-gray-900 mb-2">YOUR LEGAL REMEDIES:</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>File a complaint with <a href="https://www.dole.gov.ph/sena/" target="_blank" class="text-blue-600 hover:underline">DOLE</a> for unpaid wages (money claims)</li>
+      <li>File an illegal dismissal case with <a href="https://nlrc.dole.gov.ph/" target="_blank" class="text-blue-600 hover:underline">NLRC</a></li>
+      <li>Seek reinstatement with full backwages</li>
+      <li>Claim moral and exemplary damages</li>
+    </ul>
+  </div>
 
-2. Unjust Termination: Article 294 (formerly Article 279) of the Labor Code provides security of tenure to employees. Termination without just or authorized cause and without due process constitutes illegal dismissal.
+  <div>
+    <h3 class="font-bold text-gray-900 mb-2">JURISDICTION:</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><a href="https://www.dole.gov.ph/" target="_blank" class="text-blue-600 hover:underline">DOLE</a>: Money claims up to ₱5,000 per employee</li>
+      <li><a href="https://nlrc.dole.gov.ph/" target="_blank" class="text-blue-600 hover:underline">NLRC</a>: Illegal dismissal cases and higher money claims</li>
+    </ul>
+  </div>
+</div>
 
-3. Due Process Requirements: Article 292 requires employers to follow procedural due process - written notice specifying grounds for termination and opportunity to be heard.
-
-YOUR LEGAL REMEDIES:
-- File a complaint with DOLE for unpaid wages (money claims)
-- File an illegal dismissal case with NLRC
-- Seek reinstatement with full backwages
-- Claim moral and exemplary damages
-
-JURISDICTION:
-- DOLE: Money claims up to ₱5,000 per employee
-- NLRC: Illegal dismissal cases and higher money claims
-
-You have strong grounds for both complaints, Bryan. The law is clearly on your side.`,
+<p class="mt-4 font-medium">You have strong grounds for both complaints, Bryan. The law is clearly on your side.</p>`,
 
   documents: {
     required: [
@@ -596,13 +613,11 @@ export default function ChatPage() {
                           : "bg-white border shadow-sm"
                     }`}
                   >
-                    <p
-                      className={`text-sm whitespace-pre-line ${
-                        message.type === "loading" ? "text-gray-500 italic" : ""
-                      }`}
-                    >
-                      {message.content}
-                    </p>
+                    {message.type === "loading" ? (
+                      <p className="text-sm whitespace-pre-line text-gray-500 italic">{message.content}</p>
+                    ) : (
+                      <div className="text-sm" dangerouslySetInnerHTML={{ __html: message.content }} />
+                    )}
 
                     {/* Documents Section */}
                     {message.documents && (
